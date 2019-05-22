@@ -3,7 +3,7 @@ Attention: [MDB React Pro](https://mdbootstrap.com/products/react-ui-kit/) (Mate
 
 ## Getting Started
 To test, contribute or just see what we did follow few easy steps:
-- purchase a MDB React Pro [here](https://mdbootstrap.com/products/react-ui-kit/) and download the compressed file
+- purchase a MDB React Pro license [here](https://mdbootstrap.com/products/react-ui-kit/) and download the compressed file
 - extract the file and run `npm install` (or `yarn install` if you don't use NPM). This will automatically unzip `mdbreact-x.x.x.tgz` and create a ReactJS project
 - clone the repository using `git clone https://github.com/aichner/KISy-Webapp.git .`
 - cd to the directory with the repository
