@@ -7,21 +7,42 @@ import { FaFacebook } from 'react-icons/fa';
 import "./login.scss";
 
 class LoginPage extends Component {
-  state = {
-    email: undefined,
-    password: undefined
+  constructor(props) {
+    super(props);
+    this.state = { email: '', password: '' };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+  
  
   responseFacebook = (response) => {
     console.log(response);
+
+    let name = response.name;
+    let first_name = response.first_name;
+    let last_name = response.last_name;
+    let email = response.email;
+    let accessToken = response.accessToken;
+    let picture = response.picture.data.url;
+
+    let facebook_data = {
+      name, first_name, last_name, email, accessToken, picture
+    }
+    console.log(facebook_data);
+    // Save all data to DB and continue
   }
 
-  setEmail = (e) => {
-    this.setState({email: e.target.value});
+  handleChange(event) {
+    // Get the name of the input field
+    let field = event.target.name;
+    // Save the current value into the desired state
+    this.setState({[field]: event.target.value});
   }
 
-  setPassword = (e) => {
-    this.setState({password: e.target.value});
+  handleSubmit(event) {
+    console.log(this.state);
+    event.preventDefault();
   }
 
   render() {
@@ -50,9 +71,10 @@ class LoginPage extends Component {
                 </label>
                 <input
                   type="email"
+                  name="email"
                   id="defaultFormLoginEmailEx"
                   className="form-control"
-                  onChange={ this.setEmail }
+                  onChange={ this.handleChange }
                   value={ this.state.email }
                 />
                 <br />
@@ -61,9 +83,10 @@ class LoginPage extends Component {
                 </label>
                 <input
                   type="password"
+                  name="password"
                   id="defaultFormLoginPasswordEx"
                   className="form-control"
-                  onChange={ this.setPasswort }
+                  onChange={ this.handleChange }
                   value={ this.state.password }
                 />
               </div>
@@ -73,6 +96,7 @@ class LoginPage extends Component {
                   rounded
                   type="button"
                   className="z-depth-1a"
+                  onClick={ this.handleSubmit }
                 >
                   Log in
                 </MDBBtn>
