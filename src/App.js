@@ -36,7 +36,7 @@ class App extends Component {
           <MDBNavbar color="indigo" dark expand="md" fixed="top" scrolling>
             <MDBNavbarBrand href="/">
               <Logo style={{ height: '2.5rem', width: "2.5rem" }} />
-              MDB React
+              KISy
             </MDBNavbarBrand>
             <MDBNavbarToggler onClick={this.toggleCollapse("mainNavbarCollapse")} />
             <MDBCollapse
@@ -137,7 +137,7 @@ class App extends Component {
           </main>
           <MDBFooter color="indigo">
             <p className="footer-copyright mb-0 py-3 text-center">
-              &copy; {new Date().getFullYear()} Copyright: <a href="https://www.MDBootstrap.com"> MDBootstrap.com </a>
+              &copy; 2017 - {new Date().getFullYear()} Copyright: Christian Aichner
             </p>
           </MDBFooter>
         </div>

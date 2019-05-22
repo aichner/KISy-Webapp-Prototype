@@ -5,8 +5,11 @@
   "// If You want to install mdbreact from our GitLab repository, please replace '4.14.0' with gitURL provided here ->": "git+https://oauth2:<YOUR-TOKEN-GOES-HERE>@git.mdbootstrap.com/mdb/react/re-pro.git",
   "dependencies": {
     "mdbreact": "./mdbreact-4.14.0.tgz",
+    "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-facebook-login": "^4.1.1",
+    "react-icons": "^3.7.0",
     "react-scripts": "3.0.1"
   },
   "scripts": {
