@@ -7,7 +7,7 @@
 /coverage
 
 # MDB Pro
-/src/components/atoms
+/src/templates
 /dist
 
 # production
