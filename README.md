@@ -1,9 +1,9 @@
 # KISy - Customer Information System
-Attention: <a href="https://mdbootstrap.com/products/react-ui-kit/" target="_blank">MDB React Pro</a> (Material Design for Bootstrap) is required to run this application. MDB React Pro is not included in this repository, due to MDB excluding Open Source Projects from their license.
+Attention: [MDB React Pro](https://mdbootstrap.com/products/react-ui-kit/) (Material Design for Bootstrap) is required to run this application. MDB React Pro is not included in this repository, due to MDB excluding Open Source Projects from their license.
 
 ## Getting Started
 To test, contribute or just see what we did follow few easy steps:
-- purchase a MDB React Pro <a href="https://mdbootstrap.com/products/react-ui-kit/" target="_blank">here</a> and download the compressed file
+- purchase a MDB React Pro [here](https://mdbootstrap.com/products/react-ui-kit/) and download the compressed file
 - extract the file and run `npm install` (or `yarn install` if you don't use NPM). This will automatically unzip mdbreact-x.x.x.tgz and create a ReactJS project
 - clone the repository using `git clone https://github.com/aichner/KISy-Webapp.git .`
 - cd to the directory with the repository
@@ -21,4 +21,4 @@ Before you report a bug, please take your time to find if an issue hasn't been r
 We're also open to pull requests to make our service more secure and performant
 
 ## Something Missing?
-If you still have some questions do not hesitate to ask us. Open an issue or <a href="https://mdbootstrap.com/docs/react/getting-started/quick-start/" target="_blank">visit the MDB React guide</a>
+If you still have some questions do not hesitate to ask us. Open an issue or [visit the MDB React guide](https://mdbootstrap.com/docs/react/getting-started/quick-start/)
