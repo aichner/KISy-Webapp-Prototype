@@ -1,9 +1,9 @@
-# KIS - Customer Information System
-Using MDB React Pro.
+# KISy - Customer Information System
+Attention: [MDB React Pro](https://mdbootstrap.com/products/react-ui-kit/) is required to run this application.
 
 ## Getting Started
 To test, contribute or just see what we did follow few easy steps:
-- clone the repository
+- clone the repository using `git clone https://github.com/aichner/KISy-Webapp.git .`
 - cd to the directory with the repository
 - run `yarn install` (or `npm install` if you don't use yarn)
 - run the app using `yarn start` (or `npm start`)
