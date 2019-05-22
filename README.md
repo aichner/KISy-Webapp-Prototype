@@ -1,5 +1,5 @@
 # KISy - Customer Information System
-Attention: <a href="https://mdbootstrap.com/products/react-ui-kit/" target="_blank">MDB React Pro</a>(Material Design for Bootstrap) is required to run this application. MDB React Pro is not included in this repository, due to MDB excluding Open Source Projects from their license.
+Attention: <a href="https://mdbootstrap.com/products/react-ui-kit/" target="_blank">MDB React Pro</a> (Material Design for Bootstrap) is required to run this application. MDB React Pro is not included in this repository, due to MDB excluding Open Source Projects from their license.
 
 ## Getting Started
 To test, contribute or just see what we did follow few easy steps:
