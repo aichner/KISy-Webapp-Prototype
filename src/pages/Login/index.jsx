@@ -12,9 +12,18 @@ class LoginPage extends Component {
     password: undefined
   }
  
-responseFacebook = (response) => {
-  console.log(response);
-}
+  responseFacebook = (response) => {
+    console.log(response);
+  }
+
+  setEmail = (e) => {
+    this.setState({email: e.target.value});
+  }
+
+  setPassword = (e) => {
+    this.setState({password: e.target.value});
+  }
+
   render() {
     return (
       <MDBContainer className="mt-5">
@@ -43,6 +52,8 @@ responseFacebook = (response) => {
                   type="email"
                   id="defaultFormLoginEmailEx"
                   className="form-control"
+                  onChange={ this.setEmail }
+                  value={ this.state.email }
                 />
                 <br />
                 <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
@@ -52,6 +63,8 @@ responseFacebook = (response) => {
                   type="password"
                   id="defaultFormLoginPasswordEx"
                   className="form-control"
+                  onChange={ this.setPasswort }
+                  value={ this.state.password }
                 />
               </div>
               <div className="text-center mt-4">
