@@ -81,7 +81,7 @@ class LoginPage extends Component {
   }
 
   gotoKIS = () => {
-
+    this.props.history.push('/kisy', { state: "value" });
   }
 
   gotoRegistration = () => {
@@ -90,7 +90,6 @@ class LoginPage extends Component {
     } else {
       this.props.history.push('/register', { email: this.state.email, oAuth: this.state.oAuth });
     }
-    
   }
 
   forgotPassword = () => {
