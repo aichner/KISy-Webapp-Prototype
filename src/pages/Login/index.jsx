@@ -9,7 +9,12 @@ import "./login.scss";
 class LoginPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' };
+    this.state = {
+      email: '',
+      password: '',
+      oAuth: false,
+      fb_data: undefined
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,6 +31,9 @@ class LoginPage extends Component {
     let facebook_data = {
       name, first_name, last_name, email, accessToken, picture
     }
+
+    this.setState({oAuth: true, fb_data: facebook_data});
+
     console.log(facebook_data);
 
     // Check if user exists
@@ -41,22 +49,64 @@ class LoginPage extends Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state);
     event.preventDefault();
     event.target.className += " was-validated";
+    
+    this.checkInputs();
   }
 
+  checkInputs = () => {
+    console.log(this.state);
+
+    let error = false;
+    let e = this.state.email;
+    let p = this.state.password;
+
+    if (!error) {
+      this.sendForm(e, p);
+    }
+  }
+
+  sendForm = (e, p) => {
+    this.setState({oAuth: false});
+    console.log("E-Mail: "+e+" Password: "+p);
+
+    // Send data to server
+
+    // Check if user exists
+    // If not: Show dialog that asks if the user wants to create a new user using the provided email and password
+    this.gotoRegistration();
+    // If yes: Proceed to KIS user area
+    // this.gotoKIS();
+  }
+
+  gotoKIS = () => {
+
+  }
+
+  gotoRegistration = () => {
+    if(this.state.oAuth && this.state.fb_data !== undefined){
+      this.props.history.push('/register', { email: this.state.email, oAuth: this.state.oAuth, fb_data: this.state.fb_data });
+    } else {
+      this.props.history.push('/register', { email: this.state.email, oAuth: this.state.oAuth });
+    }
+    
+  }
+
+  forgotPassword = () => {
+    if(this.state.email !== undefined && this.state.email !== ""){
+      this.props.history.push('/forgot', { email: this.state.email });
+    } else {
+      this.props.history.push('/forgot');
+    }
+  }
 
   render() {
     return (
       <MDBContainer className="mt-5">
         <MDBRow>
           <MDBCol md="6" className="m-auto text-center">
-            <form
-              className="needs-validation"
-              onSubmit={this.handleSubmit}
-              noValidate
-            >
+            
               <p className="h4 text-center mb-4">Login</p>
               <div className="oAuth">
                 <FacebookLogin
@@ -64,13 +114,18 @@ class LoginPage extends Component {
                   autoLoad={false}
                   //icon={<FaFacebook/>}
                   cssClass="btn-facebook kep-login-facebook kep-login-facebook-medium"
-                  fields="name,first_name,last_name,email,picture"
+                  fields="name, first_name,last_name,email,picture"
                   textButton="Weiter mit Facebook"
                   callback={this.responseFacebook} />
               </div>
               <div className="w-100">
                   <div className="splitter my-4"><span className="or"><span className="or-text">oder</span></span></div>
               </div>
+              <form
+                className="needs-validation"
+                onSubmit={this.handleSubmit}
+                noValidate
+              >
               <div className="text-left">
                 <div>
                   <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
@@ -106,6 +161,9 @@ class LoginPage extends Component {
                   <div style={{ top: "auto" }} className="invalid-tooltip">
                     Bitte geben Sie Ihr Passwort ein
                   </div>
+                  <div className="text-right text-muted">
+                    <span onClick={ this.forgotPassword }>Passwort vergessen?</span>
+                  </div>
                 </div>
               </div>
               <div className="text-center mt-4">
@@ -120,6 +178,7 @@ class LoginPage extends Component {
                 </MDBBtn>
               </div>
             </form>
+
           </MDBCol>
         </MDBRow>
         <hr className="my-5" />
