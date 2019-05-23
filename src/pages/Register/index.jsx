@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
-import FacebookLogin from 'react-facebook-login';
+import ReactPasswordStrength from 'react-password-strength';
 // Icons
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
@@ -13,13 +13,30 @@ class RegisterPage extends Component {
       
     };
   }
+
+  foo = () => {
+
+  }
   
   render() {
     let test = this.props.location.state
     console.log(test);
     return (
       <MDBContainer className="mt-5">
-        <p>E-Mail: {test.email}<br />oAuth: { test.oAuth.toString() }</p>
+        <MDBRow>
+          <MDBCol md="6" className="m-auto text-center">
+            <p>E-Mail: {test.email}<br />oAuth: { test.oAuth.toString() }</p>
+            <ReactPasswordStrength
+              className="customClass"
+              style={{ display: 'none' }}
+              minLength={5}
+              minScore={2}
+              scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
+              changeCallback={this.foo}
+              inputProps={{ name: "password_input", autoComplete: "off", className: "" }}
+            />
+          </MDBCol>
+        </MDBRow>
       </MDBContainer>
     );
   }
