@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 
 // Pages
 import LoginPage from "./pages/Login";
+import RegisterPage from "./pages/Register";
 
 
 // Templates
@@ -131,6 +132,7 @@ class Routes extends React.Component {
     return (
       <Switch>
         <Route exact path="/" component={LoginPage} />
+        <Route exact path="/register" component={RegisterPage} />
         <Route exact path="/addons" component={AddonsNavPage} />
         <Route exact path="/advanced" component={AdvancedNavPage} />
         <Route exact path="/components" component={ComponentsNavPage} />
