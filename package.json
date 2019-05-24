@@ -13,7 +13,8 @@
     "react-facebook-login": "^4.1.1",
     "react-icons": "^3.7.0",
     "react-password-strength": "^2.4.0",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "validate-vat": "^0.5.1"
   },
   "scripts": {
     "start": "react-scripts start",
