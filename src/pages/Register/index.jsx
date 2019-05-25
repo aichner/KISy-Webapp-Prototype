@@ -19,8 +19,7 @@ class RegisterPage extends Component {
       first_name: "",
       last_name: "",
       email: undefined,
-      company: undefined,
-      vat: { },
+      company: { isCompany: false, vatNumber: "", vatCountryCode:  "",  },
       passwordtemp: "",
       passwordrepeat: "",
       password: { valid: false, value: "", score: undefined }
