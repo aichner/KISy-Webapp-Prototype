@@ -18,11 +18,12 @@ class RegisterPage extends Component {
       formActivePanel3Changed: false,
       first_name: "",
       last_name: "",
-      email: "",
+      email: undefined,
       company: undefined,
       vat: { },
-      password_temp: "",
-      password_repeat: ""
+      passwordtemp: "",
+      passwordrepeat: "",
+      password: { valid: false, value: "", score: undefined }
 
     }
     this.handleChange = this.handleChange.bind(this);
@@ -31,30 +32,39 @@ class RegisterPage extends Component {
   }
 
   handlePasswordChange = (event) => {
-    console.log(event);
-    this.setState({password_temp: event})
-    /*let field = event.target.name;
-    let value = event.target.value;
-    if(field === "password_input"){
-      this.setState({password: value})
-    } else if(field === "password_repeat"){
-      if(this.state.password === value){
-        console.log("Password match");
-      } else {
-        console.log("Passwords do NOT match");
-      }
-    }*/
+    this.setState({passwordtemp: event}, () => this.validatePassword());
+    
   }
 
-  validatePassword = (event) => {
-    this.setState({password_repeat: event.target.value})
-
-    if(this.state.password_temp.password = event.target.value){
-      this.setState({password: event.target.value})
-    } else {
-      console.log("passwords do not match");
-    }
+  repeatPassword = (event) => {
+    this.setState({passwordrepeat: event.target.value}, () => this.validatePassword());
     
+  } 
+
+  validatePassword = () => {
+    if(this.state.passwordtemp != "" && this.state.passwordtemp != undefined && this.state.passwordrepeat != "" && this.state.passwordrepeat != undefined){
+      if(this.state.passwordtemp.password === this.state.passwordrepeat){
+        this.setState(prevState => ({
+          password: {
+            ...prevState.password,
+            value: this.state.passwordtemp.password,
+            valid: true,
+            score: this.state.passwordtemp.score
+          },
+        }));
+        // Show success
+        //event.target.className += " is-valid";
+      } else {
+        this.setState(prevState => ({
+          password: {
+            ...prevState.password,
+            value: "",
+            valid: false,
+            score: undefined
+          },
+        }));
+      }
+    }
   }
 
   handleChange(event) {
@@ -90,11 +100,16 @@ class RegisterPage extends Component {
 
   // Get values from login
   getEmail = () => {
-    if(this.props.location.state.email !== "" || this.props.location.state.email !== undefined || this.props.location.state.email !== null){
-      return this.props.location.state.email;
+    if(this.state.email === undefined){
+        if(this.props.location.state.email !== "" || this.props.location.state.email !== undefined || this.props.location.state.email !== null){
+        return this.props.location.state.email;
+      } else {
+        return "";
+      }
     } else {
-      return "";
+      return this.state.email;
     }
+    
   }
 
 
@@ -117,6 +132,7 @@ class RegisterPage extends Component {
   render() {
     let test = this.props.location.state
     console.log(test);
+    console.log(this.state);
     return (
       <MDBContainer className="mt-5">
             <h2 className="text-center font-weight-bold pt-4 pb-5 mb-2">
@@ -184,24 +200,25 @@ class RegisterPage extends Component {
                         />
                       </div>
                       <div className="form-group">
-                        <label htmlFor="formGroupExampleInput">Passwort</label>
+                        <label htmlFor="formGroupPasswordTemp">Passwort</label>
                         <ReactPasswordStrength
                           minLength={5}
                           minScore={2}
                           scoreWords={['schwach', 'okay', 'gut', 'stark', 'sehr stark']}
                           tooShortWord="zu schwach"
                           changeCallback={ this.handlePasswordChange }
-                          inputProps={{ name: "password_input", autoComplete: "off", className: "" }}
+                          value = { this.state.password_temp }
+                          inputProps={{ name: "password_temp", autoComplete: "off", className: "" }}
                         />
                       </div>
                        <div className="form-group">
-                        <label htmlFor="formGroupExampleInput">Passwort wiederholen</label>
+                        <label htmlFor="formGroupPasswordRepeat">Passwort wiederholen</label>
                         <input
                           value={ this.state.password_repeat }
                           type="password"
                           name="password_repeat"
-                          className="form-control"
-                          onChange={ this.validatePassword }
+                          className= { this.state.password.valid ? 'form-control is-valid' : 'form-control' }
+                          onChange={ this.repeatPassword }
                         />
                       </div>
 
