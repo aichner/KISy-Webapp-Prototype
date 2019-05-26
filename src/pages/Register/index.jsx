@@ -19,15 +19,18 @@ class RegisterPage extends Component {
       first_name: "",
       last_name: "",
       email: undefined,
-      company: { isCompany: false, vatNumber: "", vatCountryCode:  "",  },
+      company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", vatName: "", name: ""  },
       passwordtemp: "",
       passwordrepeat: "",
-      password: { valid: false, value: "", score: undefined }
+      password: { valid: false, value: "", score: undefined },
+      temp: { vat: "" }
 
     }
     this.handleChange = this.handleChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
+    this.handleCompanyChange = this.handleCompanyChange.bind(this);
+    this.validateVAT = this.validateVAT.bind(this);
   }
 
   handlePasswordChange = (event) => {
@@ -41,7 +44,7 @@ class RegisterPage extends Component {
   } 
 
   validatePassword = () => {
-    if(this.state.passwordtemp != "" && this.state.passwordtemp != undefined && this.state.passwordrepeat != "" && this.state.passwordrepeat != undefined){
+    if(this.state.passwordtemp !== "" && this.state.passwordtemp !== undefined && this.state.passwordrepeat !== "" && this.state.passwordrepeat !== undefined){
       if(this.state.passwordtemp.password === this.state.passwordrepeat){
         this.setState(prevState => ({
           password: {
@@ -108,12 +111,39 @@ class RegisterPage extends Component {
     } else {
       return this.state.email;
     }
-    
   }
-
 
   foo = () => {
 
+  }
+
+  // Company values
+  handleCompanyChange(event) {
+    let field = event.target.name;
+    let value = event.target.value;
+    switch(field) {
+      case 'company_name':
+        this.setState(prevState => ({
+          company: {
+            ...prevState.company,
+            name: value
+          }
+        }));
+        break;
+      case 'company_vat':
+        this.setState(prevState => ({
+          temp: {
+            ...prevState.temp,
+            vat: value
+          }
+        }));
+        if(this.validateVAT(value)){
+
+        }
+        break;
+      default:
+        return 'foo';
+    }
   }
 
   validateVAT = (input) => {
@@ -122,9 +152,31 @@ class RegisterPage extends Component {
     let countrycode = input.substring(0,2);
     let vatnumber = input.substring(2);
 
-    validate( countrycode,  vatnumber,  function(err, validationInfo) {
-        console.log(err);
-        console.log(validationInfo);
+    validate ( countrycode,  vatnumber, (err, validationInfo) => {
+      console.log(err);
+      console.log(validationInfo);
+      if(validationInfo !== undefined && validationInfo !== null){
+        console.log("Ready");
+        if(validationInfo.valid === true){
+          console.log("Yes");
+          // Error is here - "this" is not recognized
+          this.setState(prevState => ({
+            company: {
+              ...prevState.company,
+              vatNumber: validationInfo.vatNumber,
+              vatCountryCode: validationInfo.countryCode,
+              vatAddress: validationInfo.address,
+              vatName: validationInfo.name
+            }
+          }));
+          return true;
+        } else {
+          console.log("No");
+          return false;
+        }
+      } else {
+        console.log("Still waiting");
+      }
     });
   }
   
@@ -233,15 +285,31 @@ class RegisterPage extends Component {
                   </MDBCol>
                 )}
                 {this.state.formActivePanel2 === 2 && (
-                  <MDBCol md="12">
+                  <MDBCol md="6" className="m-auto">
                     <h3 className="font-weight-bold pl-0 my-4">
-                      <strong>Personal Data</strong>
+                      <strong>Kontaktdaten</strong>
                     </h3>
-                    <MDBInput
-                      label="First Name"
-                      className="mt-3"
-                      autoFocus={this.calculateAutofocus(2)}
-                    />
+                    <div className="form-group">
+                      <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
+                      <input
+                        value={ this.state.company.name }
+                        type="text"
+                        name="company_name"
+                        className="form-control"
+                        onChange={ this.handleCompanyChange }
+                        autoFocus={this.calculateAutofocus(2)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="formGroupExampleInput">UID-Nummer <span className="text-muted">(VAT)</span></label>
+                      <input
+                        value={ this.state.temp.vat }
+                        type="text"
+                        name="company_vat"
+                        className="form-control"
+                        onChange={ this.handleCompanyChange }
+                      />
+                    </div>
                     <MDBInput label="Second Name" className="mt-3" />
                     <MDBInput label="Surname" className="mt-3" />
                     <MDBInput label="Address" type="textarea" rows="2" />
