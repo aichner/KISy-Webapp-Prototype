@@ -1,10 +1,92 @@
 import React, { Component } from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBStepper, MDBStep } from "mdbreact";
 import ReactPasswordStrength from 'react-password-strength';
+import Autosuggest from 'react-autosuggest';
 // Icons
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
 import "./register.scss";
+
+const languages = [
+  {
+    name: 'C',
+    year: 1972
+  },
+  {
+    name: 'C#',
+    year: 2000
+  },
+  {
+    name: 'C++',
+    year: 1983
+  },
+  {
+    name: 'Clojure',
+    year: 2007
+  },
+  {
+    name: 'Elm',
+    year: 2012
+  },
+  {
+    name: 'Go',
+    year: 2009
+  },
+  {
+    name: 'Haskell',
+    year: 1990
+  },
+  {
+    name: 'Java',
+    year: 1995
+  },
+  {
+    name: 'Javascript',
+    year: 1995
+  },
+  {
+    name: 'Perl',
+    year: 1987
+  },
+  {
+    name: 'PHP',
+    year: 1995
+  },
+  {
+    name: 'Python',
+    year: 1991
+  },
+  {
+    name: 'Ruby',
+    year: 1995
+  },
+  {
+    name: 'Scala',
+    year: 2003
+  }
+];
+
+// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
+const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const getSuggestions = value => {
+  const escapedValue = escapeRegexCharacters(value.trim());
+  
+  if (escapedValue === '') {
+    return [];
+  }
+
+  const regex = new RegExp('^' + escapedValue, 'i');
+  const suggestions = languages.filter(language => regex.test(language.name));
+  
+  if (suggestions.length === 0) {
+    return [
+      { isAddNew: true }
+    ];
+  }
+  
+  return suggestions;
+}
 
 class RegisterPage extends Component {
   constructor(props) {
@@ -19,7 +101,7 @@ class RegisterPage extends Component {
       first_name: "",
       last_name: "",
       email: undefined,
-      company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", vatName: "", name: ""  },
+      company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", vatName: "", name: "", value: "", suggestions: [] },
       passwordtemp: "",
       passwordrepeat: "",
       password: { valid: false, value: "", score: undefined },
@@ -146,6 +228,21 @@ class RegisterPage extends Component {
     }
   }
 
+  onClick = nr => () =>{
+    let companystate = false;
+    console.log(nr);
+    if(nr === 2){
+      companystate = true;
+    }
+
+    this.setState(prevState => ({
+      company: {
+        ...prevState.company,
+        isCompany: companystate
+      }
+    }));
+  }
+
   validateVAT = (input) => {
     let validate = require('validate-vat');
 
@@ -179,11 +276,77 @@ class RegisterPage extends Component {
       }
     });
   }
+
+  // Autosuggest will call this function every time you need to update suggestions.
+  // You already implemented this logic above, so just use it.
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState(prevState => ({
+      company: {
+        ...prevState.company,
+        suggestions: getSuggestions(value)
+      }
+    }));
+  };
+
+  // Autosuggest will call this function every time you need to clear suggestions.
+  onSuggestionsClearRequested = () => {
+    this.setState(prevState => ({
+      company: {
+        ...prevState.company,
+        suggestions: []
+      }
+    }));
+  };
+
+  onCompanyNameChange = (event, { newValue }) => {
+    this.setState(prevState => ({
+      company: {
+        ...prevState.company,
+        name: newValue
+      }
+    }));
+  };
+
+  onSuggestionSelected = (event, { suggestion }) => {
+    if (suggestion.isAddNew) {
+      console.log('Add new:', this.state.company.value);
+    }
+  };
+
+  getSuggestionValue = suggestion => {
+    if (suggestion.isAddNew) {
+      return this.state.value;
+    }
+    
+    return suggestion.name;
+  };
+
+   renderSuggestion = suggestion => {
+    if (suggestion.isAddNew) {
+      return (
+        <span>
+          [+] Add new: <strong>{this.state.company.value}</strong>
+        </span>
+      );
+    }
+
+    return suggestion.name;
+  };
   
   render() {
     let test = this.props.location.state
     console.log(test);
     console.log(this.state);
+
+    const { value, suggestions } = this.state.company;
+
+    // Autosuggest will pass through all these props to the input.
+    const inputProps = {
+      placeholder: 'Firmenwortlaut (Firmenname)',
+      value,
+      onChange: this.onCompanyNameChange
+    };
+
     return (
       <MDBContainer className="mt-5">
             <h2 className="text-center font-weight-bold pt-4 pb-5 mb-2">
@@ -289,46 +452,48 @@ class RegisterPage extends Component {
                     <h3 className="font-weight-bold pl-0 my-4">
                       <strong>Kontaktdaten</strong>
                     </h3>
-                    <div className="form-group">
-                      <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
-                      <input
-                        value={ this.state.company.name }
-                        type="text"
-                        name="company_name"
-                        className="form-control"
-                        onChange={ this.handleCompanyChange }
-                        autoFocus={this.calculateAutofocus(2)}
-                      />
+                    <div className="form-inline">
+                      <MDBInput onClick={this.onClick(1)} checked={this.state.company.isCompany===false ? true : false} label="Privatperson"
+                        type="radio" id="radio1" />
+                      <MDBInput onClick={this.onClick(2)} checked={this.state.company.isCompany===true ? true : false} label="Unternehmen"
+                        type="radio" id="radio2" />
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="formGroupExampleInput">UID-Nummer <span className="text-muted">(VAT)</span></label>
-                      <input
-                        value={ this.state.temp.vat }
-                        type="text"
-                        name="company_vat"
-                        className="form-control"
-                        onChange={ this.handleCompanyChange }
-                      />
-                    </div>
-                    <MDBInput label="Second Name" className="mt-3" />
-                    <MDBInput label="Surname" className="mt-3" />
-                    <MDBInput label="Address" type="textarea" rows="2" />
-                    <MDBBtn
-                      color="mdb-color"
-                      rounded
-                      className="float-left"
-                      onClick={this.handleNextPrevClick(2)(1)}
-                    >
-                      previous
-                    </MDBBtn>
-                    <MDBBtn
-                      color="mdb-color"
-                      rounded
-                      className="float-right"
-                      onClick={this.handleNextPrevClick(2)(3)}
-                    >
-                      next
-                    </MDBBtn>
+                    {this.state.company.isCompany ? (
+                      <div>
+                         <Autosuggest 
+                            suggestions={suggestions}
+                            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                            getSuggestionValue={this.getSuggestionValue}
+                            renderSuggestion={this.renderSuggestion}
+                            onSuggestionSelected={this.onSuggestionSelected}
+                            inputProps={inputProps} 
+                          />
+                        <div className="form-group">
+                          <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
+                          <input
+                            value={ this.state.company.name }
+                            type="text"
+                            name="company_name"
+                            className="form-control"
+                            onChange={ this.handleCompanyChange }
+                            autoFocus={this.calculateAutofocus(2)}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="formGroupExampleInput">UID-Nummer <span className="text-muted">(VAT)</span></label>
+                          <input
+                            value={ this.state.temp.vat }
+                            type="text"
+                            name="company_vat"
+                            className="form-control"
+                            onChange={ this.handleCompanyChange }
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <MDBInput label="Address" type="textarea" rows="2" />
+                    )}
                   </MDBCol>
                 )}
                 {this.state.formActivePanel2 === 3 && (
