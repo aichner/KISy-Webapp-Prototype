@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBStepper, MDBStep } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBProgress, MDBRangeInput, MDBIcon } from "mdbreact";
 import ReactPasswordStrength from 'react-password-strength';
 import Autosuggest from 'react-autosuggest';
 // Icons
@@ -108,12 +108,16 @@ class RegisterPage extends Component {
       temp: { vat: "" },
       address: { country: "", zip: "", street: "", city: "" },
       validate: { email: undefined },
-      vattemp: undefined // True = Valid VAT, False = Invalid VAT, Undefined = No VAT
+      vattemp: undefined, // True = Valid VAT, False = Invalid VAT, Undefined = No VAT
+      personalisation: { informal: true, gdpr: false, newsletter: false, connection: 50 },
+      progress: { value: 25, text: "Gleich geschafft!", lastPoint: 1},
     }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleAddressChange = this.handleAddressChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handlePersonalisationCheckboxChange = this.handlePersonalisationCheckboxChange.bind(this);
+    this.handlePersonalisationSliderChange1 = this.handlePersonalisationSliderChange1.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.validateVAT = this.validateVAT.bind(this);
@@ -122,6 +126,30 @@ class RegisterPage extends Component {
   handlePasswordChange = (event) => {
     this.setState({passwordtemp: event}, () => this.validatePassword());
     
+  }
+
+  handlePersonalisationCheckboxChange = (event) => {
+    let field = event.target.name;
+    let value = event.target.checked;
+
+    this.setState(prevState => ({
+      personalisation: {
+        ...prevState.personalisation,
+        [field]: value
+      }
+    }));
+  }
+
+  handlePersonalisationSliderChange1 = (event) => {
+    let field = "connection";
+    let value = event;
+
+    this.setState(prevState => ({
+      personalisation: {
+        ...prevState.personalisation,
+        [field]: value
+      }
+    }));
   }
 
   repeatPassword = (event) => {
@@ -174,18 +202,28 @@ class RegisterPage extends Component {
     }));
   }
 
-  swapFormActive = a => param => e => {
+  /*swapFormActive = a => param => e => {
     if(this.checkSwap(param)){
+      console.log("Yes");
       this.setState({
         ["formActivePanel" + a]: param,
         ["formActivePanel" + a + "Changed"]: true
       });
+      this.setState(prevState => ({
+        progress: {
+          ...prevState.progress,
+          value: param * 10,
+          text: "Legen wir los!"
+        }
+      }));
     } else {
       console.log("Action blocked.");
     }
-  };
+  };*/
 
   checkSwap = (param) => {
+    //return true;
+
     switch(param){
       case 1:
         return true;
@@ -226,10 +264,21 @@ class RegisterPage extends Component {
 
   handleNextPrevClick = a => param => e => {
     if(this.checkSwap(param)){
+      console.log("Yes");
       this.setState({
         ["formActivePanel" + a]: param,
         ["formActivePanel" + a + "Changed"]: true
       });
+      if(param > this.state.progress.lastPoint){
+        this.setState(prevState => ({
+          progress: {
+            ...prevState.progress,
+            value: this.state.progress.value + 20,
+            text: "Wir sind fast da!",
+            lastPoint: param
+          }
+        }));
+      }
     } else {
       console.log("Not enough information!");
     }
@@ -422,6 +471,7 @@ class RegisterPage extends Component {
   };
   
   render() {
+    
     let test = this.props.location.state
     console.log(test);
     console.log(this.state);
@@ -440,7 +490,10 @@ class RegisterPage extends Component {
             <h2 className="text-center font-weight-bold pt-4 pb-5 mb-2">
               <strong>Nur noch wenige Schritte!</strong>
             </h2>
-            <MDBStepper icon>
+            <MDBProgress material value={this.state.progress.value}>
+              {this.state.progress.text}
+            </MDBProgress>
+            {/*<MDBStepper icon>
               <MDBStep
                 icon="folder-open"
                 stepName="Basic Information"
@@ -461,9 +514,9 @@ class RegisterPage extends Component {
                 stepName="Finish"
                 onClick={this.swapFormActive(2)(4)}
               />
-            </MDBStepper>
+            </MDBStepper>*/}
 
-            <form action="" method="post" autoComplete="off">
+            <div>
               <input autoComplete="false" name="hidden" type="hidden" value="llama"/>
               <MDBRow>
                 {this.state.formActivePanel2 === 1 && (
@@ -514,31 +567,36 @@ class RegisterPage extends Component {
                         />
                       </div>
                       <hr />
-                      <div className="form-group">
-                        <label htmlFor="formGroupPasswordTemp">Passwort<span className="deep-orange-text pl-1">*</span></label>
-                        <ReactPasswordStrength
-                          minLength={5}
-                          minScore={2}
-                          scoreWords={['schwach', 'okay', 'gut', 'stark', 'sehr stark']}
-                          tooShortWord="zu schwach"
-                          changeCallback={ this.handlePasswordChange }
-                          value = { this.state.password_temp }
-                          inputProps={{ name: "password_temp", autoComplete: "off", className: "" }}
-                          required
-                        />
-                      </div>
-                       <div className="form-group">
-                        <label htmlFor="formGroupPasswordRepeat">Passwort wiederholen<span className="deep-orange-text pl-1">*</span></label>
-                        <input
-                          value={ this.state.password_repeat }
-                          type="password"
-                          name="password_repeat"
-                          className= { this.state.password.valid ? 'form-control is-valid' : 'form-control' }
-                          onChange={ this.repeatPassword }
-                          required
-                        />
-                      </div>
-
+                      { this.state.progress.lastPoint === 1 ? (
+                        <div>
+                          <div className="form-group">
+                            <label htmlFor="formGroupPasswordTemp">Passwort<span className="deep-orange-text pl-1">*</span></label>
+                            <ReactPasswordStrength
+                              minLength={5}
+                              minScore={2}
+                              scoreWords={['schwach', 'okay', 'gut', 'stark', 'sehr stark']}
+                              tooShortWord="zu schwach"
+                              changeCallback={ this.handlePasswordChange }
+                              value = { this.state.password_temp }
+                              inputProps={{ name: "password_temp", autoComplete: "off", className: "" }}
+                              required
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="formGroupPasswordRepeat">Passwort wiederholen<span className="deep-orange-text pl-1">*</span></label>
+                            <input
+                              value={ this.state.password_repeat }
+                              type="password"
+                              name="password_repeat"
+                              className= { this.state.password.valid ? 'form-control is-valid' : 'form-control' }
+                              onChange={ this.repeatPassword }
+                              required
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-muted"><MDBIcon icon="check" className="green-text pr-2"/>Das Passwort wurde erfolgreich gesetzt</p>
+                      ) }
                       <MDBBtn
                         color="mdb-color"
                         rounded
@@ -548,7 +606,6 @@ class RegisterPage extends Component {
                       >
                         Weiter
                       </MDBBtn>
-                 
                   </MDBCol>
                 )}
                 {this.state.formActivePanel2 === 2 && (
@@ -573,6 +630,9 @@ class RegisterPage extends Component {
                             className= { this.state.vattemp === true ? 'form-control is-valid' : this.state.vattemp === false ? 'form-control is-invalid' : "form-control" }
                             onChange={ this.handleCompanyChange }
                           />
+                          <small id="emailHelp" className="form-text text-muted">
+                            Die UID-Nummer dient der Identifikation gegenüber anderen Unternehmen.
+                          </small>
                         </div>
                         <div className="form-group">
                           <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span><span className="deep-orange-text pl-1">*</span></label>
@@ -607,7 +667,7 @@ class RegisterPage extends Component {
                               <div>
                                 <label htmlFor="formGroupExampleInput">Land<span className="deep-orange-text pl-1">*</span></label>
                                 <select value={this.state.address.country} name="country" className="browser-default custom-select" onChange={ this.handleAddressChange } required>
-                                  <option value="">Bitte auswählen</option>
+                                  <option value="">Auswählen</option>
                                   <option value="AT">Österreich</option>
                                   <option value="DE">Deutschland</option>
                                   <option value="CH">Schweiz</option>
@@ -625,7 +685,7 @@ class RegisterPage extends Component {
                                 required
                               />
                             </div>
-                            <div className="col">
+                            <div className="col-5">
                               <label htmlFor="formGroupExampleInput">Stadt<span className="deep-orange-text pl-1">*</span></label>
                               <input
                                 value= { this.state.address.city }
@@ -641,9 +701,17 @@ class RegisterPage extends Component {
                         <MDBBtn
                           color="mdb-color"
                           rounded
+                          className="float-left"
+                          onClick={this.handleNextPrevClick(2)(1)}
+                        >
+                          Zurück
+                        </MDBBtn>
+                        <MDBBtn
+                          color="mdb-color"
+                          rounded
                           className="float-right"
                           disabled={!this.checkSwap(3)}
-                          onClick={this.handleNextPrevClick(3)(3)}
+                          onClick={this.handleNextPrevClick(2)(3)}
                         >
                           Weiter
                       </MDBBtn>
@@ -652,18 +720,55 @@ class RegisterPage extends Component {
                 {this.state.formActivePanel2 === 3 && (
                   <MDBCol md="12">
                     <h3 className="font-weight-bold pl-0 my-4">
-                      <strong>Terms and conditions</strong>
+                      <strong>Personalisierung</strong>
                     </h3>
+                    <div className="text-center">
+                      <label htmlFor="formGroupExampleInput">Wie wichtig ist { this.state.personalisation.informal ? (
+                          "Dir"
+                        ) : (
+                          "Ihnen"
+                        ) } eine persönliche Verbindung zu { this.state.personalisation.informal ? (
+                          "Deinem"
+                        ) : (
+                          "Ihrem"
+                        ) } Geschäfts-Partner?</label>
+                      <MDBRow center>
+                          <span className="font-weight-bold purple-text mr-2">Nicht wichtig</span>
+                          <MDBRangeInput
+                            name="connection"
+                            getValue={this.handlePersonalisationSliderChange1}
+                            min={0}
+                            max={100}
+                            value={this.state.personalisation.connection}
+                            formClassName="w-50"
+                          />
+                          <span className="font-weight-bold purple-text ml-2">Sehr wichtig</span>
+                      </MDBRow>
+                    </div>
                     <MDBInput
-                      label="I agreee to the terms and conditions"
+                      label='Ich möchte mit "Du" angesprochen werden'
                       type="checkbox"
                       id="checkbox"
+                      name="informal"
+                      checked={ this.state.personalisation.informal }
+                      onChange={ this.handlePersonalisationCheckboxChange }
                       autoFocus={this.calculateAutofocus(2)}
                     />
                     <MDBInput
-                      label="I want to receive newsletter"
+                      label="Ich habe die Datenschutzerklärung gelesen und akzeptiere diese"
                       type="checkbox"
-                      id="checkbox2"
+                      id="checkbox5"
+                      name="gdpr"
+                      checked={ this.state.personalisation.gdpr }
+                      onChange={ this.handlePersonalisationCheckboxChange }
+                    />
+                    <MDBInput
+                      label="Ich möchte Newsletters erhalten und von Sonderangeboten profitieren"
+                      type="checkbox"
+                      id="checkbox10"
+                      name="newsletter"
+                      checked={ this.state.personalisation.newsletter }
+                      onChange={ this.handlePersonalisationCheckboxChange }
                     />
                     <MDBBtn
                       color="mdb-color"
@@ -671,15 +776,15 @@ class RegisterPage extends Component {
                       className="float-left"
                       onClick={this.handleNextPrevClick(2)(2)}
                     >
-                      previous
+                      Zurück
                     </MDBBtn>
                     <MDBBtn
-                      color="mdb-color"
+                      color="success"
                       rounded
                       className="float-right"
                       onClick={this.handleNextPrevClick(2)(4)}
                     >
-                      next
+                      Starten
                     </MDBBtn>
                   </MDBCol>
                 )}
@@ -711,7 +816,7 @@ class RegisterPage extends Component {
                   </MDBCol>
                 )}
               </MDBRow>
-            </form>
+            </div>
       </MDBContainer>
     );
   }
