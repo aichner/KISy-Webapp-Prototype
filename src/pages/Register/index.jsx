@@ -547,7 +547,11 @@ class RegisterPage extends Component {
                             inputProps={inputProps}
                           />
                         </div>
-                        <div className="form-group">
+                      </div>
+                    ) : (
+                      <span></span>
+                    )}
+                    <div className="form-group">
                           <label htmlFor="formGroupExampleInput">Adresse <span className="text-muted">(Musterstraße 7)</span><span className="deep-orange-text pl-1">*</span></label>
                           <input
                             value={ this.state.address.street }
@@ -592,21 +596,6 @@ class RegisterPage extends Component {
                             </div>
                           </div>
                         </div>
-                        {/*<div className="form-group">
-                          <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
-                          <input
-                            value={ this.state.company.name }
-                            type="text"
-                            name="company_name"
-                            className="form-control"
-                            onChange={ this.handleCompanyChange }
-                            autoFocus={this.calculateAutofocus(2)}
-                          />
-                        </div>*/}
-                      </div>
-                    ) : (
-                      <MDBInput label="Address" type="textarea" rows="2" />
-                    )}
                   </MDBCol>
                 )}
                 {this.state.formActivePanel2 === 3 && (
