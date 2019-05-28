@@ -278,9 +278,9 @@ class RegisterPage extends Component {
     }));
   }
 
-  validateVAT = (input) => {
+  validateVAT = (raw) => {
     let validate = require('validate-vat');
-
+    let input = raw.replace(/\s/g, '');
     let countrycode = input.substring(0,2);
     let vatnumber = input.substring(2);
 
@@ -300,6 +300,14 @@ class RegisterPage extends Component {
               vatAddress: validationInfo.address,
               hasVAT: true,
               name: validationInfo.name
+            }
+          }));
+          let address_parts = validationInfo.address.split(',');
+          this.setState(prevState => ({
+            address: {
+              ...prevState.address,
+              country: validationInfo.countryCode.toUpperCase(),
+              street: address_parts[0].trim()
             }
           }));
           return true;
@@ -554,7 +562,7 @@ class RegisterPage extends Component {
                             <div className="col">
                               <div>
                                 <label htmlFor="formGroupExampleInput">Land<span className="deep-orange-text pl-1">*</span></label>
-                                <select name="country" className="browser-default custom-select" onChange={ this.handleAddressChange }>
+                                <select value={this.state.address.country} name="country" className="browser-default custom-select" onChange={ this.handleAddressChange }>
                                   <option value="">Bitte auswählen</option>
                                   <option value="AT">Österreich</option>
                                   <option value="DE">Deutschland</option>
@@ -562,22 +570,22 @@ class RegisterPage extends Component {
                                 </select>
                               </div>
                             </div>
+                             <div className="col">
+                              <label htmlFor="formGroupExampleInput">Postleitzahl <span className="text-muted">(PLZ)</span><span className="deep-orange-text pl-1">*</span></label>
+                              <input
+                                value= { this.state.address.zip }
+                                type="text"
+                                name="zip"
+                                className="form-control"
+                                onChange={ this.handleAddressChange }
+                              />
+                            </div>
                             <div className="col">
                               <label htmlFor="formGroupExampleInput">Stadt<span className="deep-orange-text pl-1">*</span></label>
                               <input
                                 value= { this.state.address.city }
                                 type="text"
                                 name="city"
-                                className="form-control"
-                                onChange={ this.handleAddressChange }
-                              />
-                            </div>
-                            <div className="col">
-                              <label htmlFor="formGroupExampleInput">Postleitzahl <span className="text-muted">(PLZ)</span><span className="deep-orange-text pl-1">*</span></label>
-                              <input
-                                value= { this.state.address.zip }
-                                type="text"
-                                name="zip"
                                 className="form-control"
                                 onChange={ this.handleAddressChange }
                               />
