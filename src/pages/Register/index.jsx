@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBProgress, MDBRangeInput, MDBIcon } from "mdbreact";
 import ReactPasswordStrength from 'react-password-strength';
 import Autosuggest from 'react-autosuggest';
+
 // Icons
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
