@@ -100,15 +100,16 @@ class RegisterPage extends Component {
       formActivePanel3Changed: false,
       first_name: "",
       last_name: "",
-      email: undefined,
-      company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", hasVAT: false, vatName: "", name: "", value: "", suggestions: [] },
+      email: this.getEmail(),
+      company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", hasVAT: false, name: "", suggestions: [] },
       passwordtemp: "",
       passwordrepeat: "",
       password: { valid: false, value: "", score: undefined },
-      temp: { vat: "" }
-
+      temp: { vat: "" },
+      address: { country: "", zip: "", street: "", city: "" }
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleAddressChange = this.handleAddressChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
@@ -127,7 +128,7 @@ class RegisterPage extends Component {
 
   validatePassword = () => {
     if(this.state.passwordtemp !== "" && this.state.passwordtemp !== undefined && this.state.passwordrepeat !== "" && this.state.passwordrepeat !== undefined){
-      if(this.state.passwordtemp.password === this.state.passwordrepeat){
+      if(this.state.passwordtemp.password === this.state.passwordrepeat && this.state.passwordtemp.score > 0){
         this.setState(prevState => ({
           password: {
             ...prevState.password,
@@ -158,18 +159,56 @@ class RegisterPage extends Component {
     this.setState({[field]: event.target.value});
   }
 
+  handleAddressChange(event) {
+    let field = event.target.name;
+    let value = event.target.value;
+
+
+    this.setState(prevState => ({
+      address: {
+        ...prevState.address,
+        [field]: value
+      }
+    }));
+  }
+
   swapFormActive = a => param => e => {
-    this.setState({
-      ["formActivePanel" + a]: param,
-      ["formActivePanel" + a + "Changed"]: true
-    });
+    if(this.checkSwap(param)){
+      this.setState({
+        ["formActivePanel" + a]: param,
+        ["formActivePanel" + a + "Changed"]: true
+      });
+    } else {
+      console.log("Action blocked.");
+    }
   };
 
+  checkSwap = (param) => {
+    return true;
+    switch(param){
+      case 1:
+        return true;
+      case 2:
+        if(this.state.email !== "" && this.state.email !== undefined && this.state.first_name !== "" && this.state.first_name !== undefined && this.state.last_name !== "" && this.state.last_name !== undefined && this.state.password.valid === true){
+          return true;
+        } else {
+          return false;
+        }
+      default:
+        return false;
+    }
+  }
+
   handleNextPrevClick = a => param => e => {
-    this.setState({
-      ["formActivePanel" + a]: param,
-      ["formActivePanel" + a + "Changed"]: true
-    });
+    if(this.checkSwap(param)){
+      this.setState({
+        ["formActivePanel" + a]: param,
+        ["formActivePanel" + a + "Changed"]: true
+      });
+    } else {
+      console.log("Not enough information!");
+    }
+    
   };
 
   handleSubmission = () => {
@@ -184,15 +223,11 @@ class RegisterPage extends Component {
 
   // Get values from login
   getEmail = () => {
-    if(this.state.email === undefined){
-        if(this.props.location.state.email !== "" || this.props.location.state.email !== undefined || this.props.location.state.email !== null){
+      if(this.props.location.state.email !== "" || this.props.location.state.email !== undefined || this.props.location.state.email !== null){
         return this.props.location.state.email;
       } else {
         return "";
       }
-    } else {
-      return this.state.email;
-    }
   }
 
   foo = () => {
@@ -263,7 +298,6 @@ class RegisterPage extends Component {
               vatNumber: validationInfo.vatNumber,
               vatCountryCode: validationInfo.countryCode,
               vatAddress: validationInfo.address,
-              vatName: validationInfo.name,
               hasVAT: true,
               name: validationInfo.name
             }
@@ -276,7 +310,6 @@ class RegisterPage extends Component {
               vatNumber: "",
               vatCountryCode: "",
               vatAddress: "",
-              vatName: "",
               hasVAT: false
             }
           }));
@@ -308,6 +341,10 @@ class RegisterPage extends Component {
       }
     }));
   };
+
+  validateAddress = (event) => {
+    
+  }
 
   onCompanyNameChange = (event, { newValue }) => {
     this.setState(prevState => ({
@@ -387,16 +424,23 @@ class RegisterPage extends Component {
             </MDBStepper>
 
             <form action="" method="post">
+              <input
+                type="hidden"
+                value="llama"
+              />
               <MDBRow>
                 {this.state.formActivePanel2 === 1 && (
                   <MDBCol md="6" className="m-auto">
+                  
                     <h3 className="font-weight-bold pl-0 my-4">
                       <strong>Allgemeine Informationen</strong>
                     </h3>
+                    
                       <div className="form-group">
-                        <label htmlFor="formGroupExampleInput">E-Mail</label>
+                        <label htmlFor="formGroupExampleInput">E-Mail<span className="deep-orange-text pl-1">*</span></label>
+                        
                         <input
-                          value={ this.getEmail() }
+                          value={ this.state.email }
                           type="email"
                           name="email"
                           className="form-control"
@@ -405,7 +449,7 @@ class RegisterPage extends Component {
                         />
                       </div>
                       <div className="form-group">
-                        <label htmlFor="formGroupExampleInput">Vorname</label>
+                        <label htmlFor="formGroupExampleInput">Vorname<span className="deep-orange-text pl-1">*</span></label>
                         <input
                           value={ this.state.first_name }
                           type="text"
@@ -415,7 +459,7 @@ class RegisterPage extends Component {
                         />
                       </div>
                       <div className="form-group">
-                        <label htmlFor="formGroupExampleInput">Nachname</label>
+                        <label htmlFor="formGroupExampleInput">Nachname<span className="deep-orange-text pl-1">*</span></label>
                         <input
                           value={ this.state.last_name }
                           type="text"
@@ -424,8 +468,9 @@ class RegisterPage extends Component {
                           onChange={ this.handleChange }
                         />
                       </div>
+                      <hr />
                       <div className="form-group">
-                        <label htmlFor="formGroupPasswordTemp">Passwort</label>
+                        <label htmlFor="formGroupPasswordTemp">Passwort<span className="deep-orange-text pl-1">*</span></label>
                         <ReactPasswordStrength
                           minLength={5}
                           minScore={2}
@@ -437,7 +482,7 @@ class RegisterPage extends Component {
                         />
                       </div>
                        <div className="form-group">
-                        <label htmlFor="formGroupPasswordRepeat">Passwort wiederholen</label>
+                        <label htmlFor="formGroupPasswordRepeat">Passwort wiederholen<span className="deep-orange-text pl-1">*</span></label>
                         <input
                           value={ this.state.password_repeat }
                           type="password"
@@ -451,9 +496,10 @@ class RegisterPage extends Component {
                         color="mdb-color"
                         rounded
                         className="float-right"
+                        disabled={!this.checkSwap(2)}
                         onClick={this.handleNextPrevClick(2)(2)}
                       >
-                        next
+                        Weiter
                       </MDBBtn>
                  
                   </MDBCol>
@@ -482,7 +528,7 @@ class RegisterPage extends Component {
                           />
                         </div>
                         <div className="form-group">
-                          <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
+                          <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span><span className="deep-orange-text pl-1">*</span></label>
                           <Autosuggest 
                             suggestions={suggestions}
                             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -492,6 +538,51 @@ class RegisterPage extends Component {
                             onSuggestionSelected={this.onSuggestionSelected}
                             inputProps={inputProps}
                           />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="formGroupExampleInput">Adresse <span className="text-muted">(Musterstraße 7)</span><span className="deep-orange-text pl-1">*</span></label>
+                          <input
+                            value={ this.state.address.street }
+                            type="text"
+                            name="street"
+                            className= "form-control"
+                            onChange={ this.handleAddressChange }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <div className="form-row">
+                            <div className="col">
+                              <div>
+                                <label htmlFor="formGroupExampleInput">Land<span className="deep-orange-text pl-1">*</span></label>
+                                <select name="country" className="browser-default custom-select" onChange={ this.handleAddressChange }>
+                                  <option value="">Bitte auswählen</option>
+                                  <option value="AT">Österreich</option>
+                                  <option value="DE">Deutschland</option>
+                                  <option value="CH">Schweiz</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div className="col">
+                              <label htmlFor="formGroupExampleInput">Stadt<span className="deep-orange-text pl-1">*</span></label>
+                              <input
+                                value= { this.state.address.city }
+                                type="text"
+                                name="city"
+                                className="form-control"
+                                onChange={ this.handleAddressChange }
+                              />
+                            </div>
+                            <div className="col">
+                              <label htmlFor="formGroupExampleInput">Postleitzahl <span className="text-muted">(PLZ)</span><span className="deep-orange-text pl-1">*</span></label>
+                              <input
+                                value= { this.state.address.zip }
+                                type="text"
+                                name="zip"
+                                className="form-control"
+                                onChange={ this.handleAddressChange }
+                              />
+                            </div>
+                          </div>
                         </div>
                         {/*<div className="form-group">
                           <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
