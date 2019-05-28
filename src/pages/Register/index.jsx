@@ -106,8 +106,11 @@ class RegisterPage extends Component {
       passwordrepeat: "",
       password: { valid: false, value: "", score: undefined },
       temp: { vat: "" },
-      address: { country: "", zip: "", street: "", city: "" }
+      address: { country: "", zip: "", street: "", city: "" },
+      validate: { email: undefined },
+      vattemp: undefined // True = Valid VAT, False = Invalid VAT, Undefined = No VAT
     }
+
     this.handleChange = this.handleChange.bind(this);
     this.handleAddressChange = this.handleAddressChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -163,7 +166,6 @@ class RegisterPage extends Component {
     let field = event.target.name;
     let value = event.target.value;
 
-
     this.setState(prevState => ({
       address: {
         ...prevState.address,
@@ -184,13 +186,36 @@ class RegisterPage extends Component {
   };
 
   checkSwap = (param) => {
-    return true;
     switch(param){
       case 1:
         return true;
       case 2:
         if(this.state.email !== "" && this.state.email !== undefined && this.state.first_name !== "" && this.state.first_name !== undefined && this.state.last_name !== "" && this.state.last_name !== undefined && this.state.password.valid === true){
           return true;
+        } else {
+          return false;
+        }
+      case 3:
+        if(this.state.company.isCompany === false){
+          if(this.state.address.street !== "" && this.state.address.city !== "" && this.state.address.country !== "" && this.state.address.zip !== ""){
+            return true;
+          } else {
+            return false;
+          }
+        } else if (this.state.company.isCompany === true){
+          if(this.state.address.street !== "" && this.state.address.city !== "" && this.state.address.country !== "" && this.state.address.zip !== "" && this.state.company.name !== ""){
+            if(this.state.company.hasVAT){
+              if(this.state.company.vatAddress !== "" && this.state.company.vatNumber !== ""){
+                return true;
+              } else {
+                return false;
+              }
+            } else {
+              return true;
+            }
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
@@ -254,6 +279,9 @@ class RegisterPage extends Component {
             vat: value
           }
         }));
+        if(value === ""){
+          this.setState({vattemp: undefined});
+        }
         if(this.validateVAT(value)){
 
         }
@@ -287,10 +315,16 @@ class RegisterPage extends Component {
     validate ( countrycode,  vatnumber, (err, validationInfo) => {
       console.log(err);
       console.log(validationInfo);
+      if(validationInfo === undefined){
+        if(this.state.temp.vat !== ""){
+          this.setState({vattemp: false});
+        } else {
+          this.setState({vattemp: undefined});
+        }
+        
+      }
       if(validationInfo !== undefined && validationInfo !== null){
-        console.log("Ready");
         if(validationInfo.valid === true){
-          console.log("Yes");
           // Error is here - "this" is not recognized
           this.setState(prevState => ({
             company: {
@@ -302,6 +336,7 @@ class RegisterPage extends Component {
               name: validationInfo.name
             }
           }));
+          this.setState({vattemp: true});
           let address_parts = validationInfo.address.split(',');
           this.setState(prevState => ({
             address: {
@@ -321,6 +356,7 @@ class RegisterPage extends Component {
               hasVAT: false
             }
           }));
+          this.setState({vattemp: false});
           return false;
         }
       } else {
@@ -350,10 +386,6 @@ class RegisterPage extends Component {
     }));
   };
 
-  validateAddress = (event) => {
-    
-  }
-
   onCompanyNameChange = (event, { newValue }) => {
     this.setState(prevState => ({
       company: {
@@ -381,7 +413,7 @@ class RegisterPage extends Component {
     if (suggestion.isAddNew) {
       return (
         <span>
-          [+] Add new: <strong>{this.state.company.name}</strong>
+          [+] Neu erstellen: <strong>{this.state.company.name}</strong>
         </span>
       );
     }
@@ -431,11 +463,8 @@ class RegisterPage extends Component {
               />
             </MDBStepper>
 
-            <form action="" method="post">
-              <input
-                type="hidden"
-                value="llama"
-              />
+            <form action="" method="post" autoComplete="off">
+              <input autoComplete="false" name="hidden" type="hidden" value="llama"/>
               <MDBRow>
                 {this.state.formActivePanel2 === 1 && (
                   <MDBCol md="6" className="m-auto">
@@ -446,7 +475,6 @@ class RegisterPage extends Component {
                     
                       <div className="form-group">
                         <label htmlFor="formGroupExampleInput">E-Mail<span className="deep-orange-text pl-1">*</span></label>
-                        
                         <input
                           value={ this.state.email }
                           type="email"
@@ -454,7 +482,14 @@ class RegisterPage extends Component {
                           className="form-control"
                           autoFocus={this.calculateAutofocus(2)}
                           onChange={ this.handleChange }
+                          required
                         />
+                        <small id="emailHelp" className="form-text text-muted">
+                          Wir geben Ihre E-Mail-Adresse niemals an Dritte weiter.
+                        </small>
+                        <div style={{ top: "auto" }} className="invalid-tooltip">
+                          Bitte geben Sie eine gültige E-Mail Adresse ein
+                        </div>
                       </div>
                       <div className="form-group">
                         <label htmlFor="formGroupExampleInput">Vorname<span className="deep-orange-text pl-1">*</span></label>
@@ -464,6 +499,7 @@ class RegisterPage extends Component {
                           name="first_name"
                           className="form-control"
                           onChange={ this.handleChange }
+                          required
                         />
                       </div>
                       <div className="form-group">
@@ -474,6 +510,7 @@ class RegisterPage extends Component {
                           name="last_name"
                           className="form-control"
                           onChange={ this.handleChange }
+                          required
                         />
                       </div>
                       <hr />
@@ -487,6 +524,7 @@ class RegisterPage extends Component {
                           changeCallback={ this.handlePasswordChange }
                           value = { this.state.password_temp }
                           inputProps={{ name: "password_temp", autoComplete: "off", className: "" }}
+                          required
                         />
                       </div>
                        <div className="form-group">
@@ -497,6 +535,7 @@ class RegisterPage extends Component {
                           name="password_repeat"
                           className= { this.state.password.valid ? 'form-control is-valid' : 'form-control' }
                           onChange={ this.repeatPassword }
+                          required
                         />
                       </div>
 
@@ -531,7 +570,7 @@ class RegisterPage extends Component {
                             value={ this.state.temp.vat }
                             type="text"
                             name="company_vat"
-                            className= { this.state.company.hasVAT ? 'form-control is-valid' : 'form-control' }
+                            className= { this.state.vattemp === true ? 'form-control is-valid' : this.state.vattemp === false ? 'form-control is-invalid' : "form-control" }
                             onChange={ this.handleCompanyChange }
                           />
                         </div>
@@ -552,13 +591,14 @@ class RegisterPage extends Component {
                       <span></span>
                     )}
                     <div className="form-group">
-                          <label htmlFor="formGroupExampleInput">Adresse <span className="text-muted">(Musterstraße 7)</span><span className="deep-orange-text pl-1">*</span></label>
+                          <label htmlFor="formGroupExampleInput">Adresse <span className="text-muted">(z.B. Musterstraße 7)</span><span className="deep-orange-text pl-1">*</span></label>
                           <input
                             value={ this.state.address.street }
                             type="text"
                             name="street"
                             className= "form-control"
                             onChange={ this.handleAddressChange }
+                            required
                           />
                         </div>
                         <div className="form-group">
@@ -566,7 +606,7 @@ class RegisterPage extends Component {
                             <div className="col">
                               <div>
                                 <label htmlFor="formGroupExampleInput">Land<span className="deep-orange-text pl-1">*</span></label>
-                                <select value={this.state.address.country} name="country" className="browser-default custom-select" onChange={ this.handleAddressChange }>
+                                <select value={this.state.address.country} name="country" className="browser-default custom-select" onChange={ this.handleAddressChange } required>
                                   <option value="">Bitte auswählen</option>
                                   <option value="AT">Österreich</option>
                                   <option value="DE">Deutschland</option>
@@ -582,6 +622,7 @@ class RegisterPage extends Component {
                                 name="zip"
                                 className="form-control"
                                 onChange={ this.handleAddressChange }
+                                required
                               />
                             </div>
                             <div className="col">
@@ -592,10 +633,20 @@ class RegisterPage extends Component {
                                 name="city"
                                 className="form-control"
                                 onChange={ this.handleAddressChange }
+                                required
                               />
                             </div>
                           </div>
                         </div>
+                        <MDBBtn
+                          color="mdb-color"
+                          rounded
+                          className="float-right"
+                          disabled={!this.checkSwap(3)}
+                          onClick={this.handleNextPrevClick(3)(3)}
+                        >
+                          Weiter
+                      </MDBBtn>
                   </MDBCol>
                 )}
                 {this.state.formActivePanel2 === 3 && (
