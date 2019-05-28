@@ -101,7 +101,7 @@ class RegisterPage extends Component {
       first_name: "",
       last_name: "",
       email: undefined,
-      company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", vatName: "", name: "", value: "", suggestions: [] },
+      company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", hasVAT: false, vatName: "", name: "", value: "", suggestions: [] },
       passwordtemp: "",
       passwordrepeat: "",
       password: { valid: false, value: "", score: undefined },
@@ -263,12 +263,23 @@ class RegisterPage extends Component {
               vatNumber: validationInfo.vatNumber,
               vatCountryCode: validationInfo.countryCode,
               vatAddress: validationInfo.address,
-              vatName: validationInfo.name
+              vatName: validationInfo.name,
+              hasVAT: true,
+              name: validationInfo.name
             }
           }));
           return true;
         } else {
-          console.log("No");
+          this.setState(prevState => ({
+            company: {
+              ...prevState.company,
+              vatNumber: "",
+              vatCountryCode: "",
+              vatAddress: "",
+              vatName: "",
+              hasVAT: false
+            }
+          }));
           return false;
         }
       } else {
@@ -309,13 +320,13 @@ class RegisterPage extends Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     if (suggestion.isAddNew) {
-      console.log('Add new:', this.state.company.value);
+      console.log('Add new:', this.state.company.name);
     }
   };
 
   getSuggestionValue = suggestion => {
     if (suggestion.isAddNew) {
-      return this.state.value;
+      return this.state.name;
     }
     
     return suggestion.name;
@@ -325,7 +336,7 @@ class RegisterPage extends Component {
     if (suggestion.isAddNew) {
       return (
         <span>
-          [+] Add new: <strong>{this.state.company.value}</strong>
+          [+] Add new: <strong>{this.state.company.name}</strong>
         </span>
       );
     }
@@ -338,13 +349,13 @@ class RegisterPage extends Component {
     console.log(test);
     console.log(this.state);
 
-    const { value, suggestions } = this.state.company;
+    const { suggestions } = this.state.company;
 
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: 'Firmenwortlaut (Firmenname)',
-      value,
-      onChange: this.onCompanyNameChange
+      value: this.state.company.name,
+      onChange: this.onCompanyNameChange,
+      className: "form-control"
     };
 
     return (
@@ -460,16 +471,29 @@ class RegisterPage extends Component {
                     </div>
                     {this.state.company.isCompany ? (
                       <div>
-                         <Autosuggest 
+                        <div className="form-group">
+                          <label htmlFor="formGroupExampleInput">UID-Nummer <span className="text-muted">(VAT)</span></label>
+                          <input
+                            value={ this.state.temp.vat }
+                            type="text"
+                            name="company_vat"
+                            className= { this.state.company.hasVAT ? 'form-control is-valid' : 'form-control' }
+                            onChange={ this.handleCompanyChange }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
+                          <Autosuggest 
                             suggestions={suggestions}
                             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                             getSuggestionValue={this.getSuggestionValue}
                             renderSuggestion={this.renderSuggestion}
                             onSuggestionSelected={this.onSuggestionSelected}
-                            inputProps={inputProps} 
+                            inputProps={inputProps}
                           />
-                        <div className="form-group">
+                        </div>
+                        {/*<div className="form-group">
                           <label htmlFor="formGroupExampleInput">Firmenwortlaut <span className="text-muted">(Firmenname)</span></label>
                           <input
                             value={ this.state.company.name }
@@ -479,17 +503,7 @@ class RegisterPage extends Component {
                             onChange={ this.handleCompanyChange }
                             autoFocus={this.calculateAutofocus(2)}
                           />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="formGroupExampleInput">UID-Nummer <span className="text-muted">(VAT)</span></label>
-                          <input
-                            value={ this.state.temp.vat }
-                            type="text"
-                            name="company_vat"
-                            className="form-control"
-                            onChange={ this.handleCompanyChange }
-                          />
-                        </div>
+                        </div>*/}
                       </div>
                     ) : (
                       <MDBInput label="Address" type="textarea" rows="2" />
