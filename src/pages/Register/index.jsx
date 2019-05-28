@@ -143,7 +143,7 @@ class RegisterPage extends Component {
 
   handlePersonalisationSliderChange1 = (event) => {
     let field = "connection";
-    let value = event;
+    let value = parseInt(event, 10);
 
     this.setState(prevState => ({
       personalisation: {
@@ -258,6 +258,12 @@ class RegisterPage extends Component {
         } else {
           return false;
         }
+      case 4:
+        if(this.state.personalisation.gdpr){
+          return true;
+        }else{
+          return false;
+        }
       default:
         return false;
     }
@@ -274,7 +280,7 @@ class RegisterPage extends Component {
         this.setState(prevState => ({
           progress: {
             ...prevState.progress,
-            value: this.state.progress.value + 20,
+            value: this.state.progress.value + 25,
             text: "Wir sind fast da!",
             lastPoint: param
           }
@@ -793,27 +799,12 @@ class RegisterPage extends Component {
                 {this.state.formActivePanel2 === 4 && (
                   <MDBCol md="12">
                     <h3 className="font-weight-bold pl-0 my-4">
-                      <strong>Finish</strong>
+                      <strong>Glückwunsch!</strong>
                     </h3>
                     <h2 className="text-center font-weight-bold my-4">
-                      Registration completed!
+                      Registrierung abgeschlossen!
                     </h2>
-                    <MDBBtn
-                      color="mdb-color"
-                      rounded
-                      className="float-left"
-                      onClick={this.handleNextPrevClick(2)(3)}
-                    >
-                      previous
-                    </MDBBtn>
-                    <MDBBtn
-                      color="success"
-                      rounded
-                      className="float-right"
-                      onClick={this.handleSubmission}
-                    >
-                      submit
-                    </MDBBtn>
+                    <p>Gleich starten und 10% beim ersten Auftrag sparen! { this.state.personalisation.informal ? ("Ziehe") : ("Ziehen Sie") } JETZT positiven Nutzen daraus.</p>
                   </MDBCol>
                 )}
               </MDBRow>
