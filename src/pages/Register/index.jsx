@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBProgress, MDBRangeInput, MDBIcon } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBProgress, MDBRangeInput, MDBIcon, MDBCard, MDBCardUp, MDBCardBody, MDBBadge } from "mdbreact";
 import ReactPasswordStrength from 'react-password-strength';
 import Autosuggest from 'react-autosuggest';
 
@@ -110,12 +110,14 @@ class RegisterPage extends Component {
       address: { country: "", zip: "", street: "", city: "" },
       validate: { email: undefined },
       vattemp: undefined, // True = Valid VAT, False = Invalid VAT, Undefined = No VAT
-      personalisation: { informal: true, gdpr: false, newsletter: false, connection: 50 },
+      personalisation: { informal: true, gdpr: false, newsletter: false, connection: 50, sex: "" },
       progress: { value: 25, text: "Gleich geschafft!", lastPoint: 1},
+      first_time_balance: <MDBBadge pill color="success">30,- €</MDBBadge>
     }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleAddressChange = this.handleAddressChange.bind(this);
+    this.handleSexChange = this.handleSexChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handlePersonalisationCheckboxChange = this.handlePersonalisationCheckboxChange.bind(this);
     this.handlePersonalisationSliderChange1 = this.handlePersonalisationSliderChange1.bind(this);
@@ -203,6 +205,18 @@ class RegisterPage extends Component {
     }));
   }
 
+  handleSexChange(event) {
+  let field = event.target.name;
+  let value = event.target.value;
+
+    this.setState(prevState => ({
+      personalisation: {
+        ...prevState.personalisation,
+        [field]: value
+      }
+    }));
+  }
+
   /*swapFormActive = a => param => e => {
     if(this.checkSwap(param)){
       console.log("Yes");
@@ -229,7 +243,7 @@ class RegisterPage extends Component {
       case 1:
         return true;
       case 2:
-        if(this.state.email !== "" && this.state.email !== undefined && this.state.first_name !== "" && this.state.first_name !== undefined && this.state.last_name !== "" && this.state.last_name !== undefined && this.state.password.valid === true){
+        if(this.state.email !== "" && this.state.email !== undefined && this.state.first_name !== "" && this.state.first_name !== undefined && this.state.last_name !== "" && this.state.last_name !== undefined && this.state.password.valid === true && this.state.personalisation.sex !== ""){
           return true;
         } else {
           return false;
@@ -552,26 +566,42 @@ class RegisterPage extends Component {
                         </div>
                       </div>
                       <div className="form-group">
-                        <label htmlFor="formGroupExampleInput">Vorname<span className="deep-orange-text pl-1">*</span></label>
-                        <input
-                          value={ this.state.first_name }
-                          type="text"
-                          name="first_name"
-                          className="form-control"
-                          onChange={ this.handleChange }
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="formGroupExampleInput">Nachname<span className="deep-orange-text pl-1">*</span></label>
-                        <input
-                          value={ this.state.last_name }
-                          type="text"
-                          name="last_name"
-                          className="form-control"
-                          onChange={ this.handleChange }
-                          required
-                        />
+                        <div className="form-row">
+                          <div className="col-3">
+                            <div>
+                              <label htmlFor="formGroupExampleInput">Ansprache<span className="deep-orange-text pl-1">*</span></label>
+                              <select value={this.state.personalisation.sex} name="sex" className="browser-default custom-select" onChange={ this.handleSexChange } required>
+                                <option value="">Auswählen</option>
+                                <option value="Herr">Herr</option>
+                                <option value="Frau">Frau</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col">
+                            <div>
+                              <label htmlFor="formGroupExampleInput">Vorname<span className="deep-orange-text pl-1">*</span></label>
+                              <input
+                                value={ this.state.first_name }
+                                type="text"
+                                name="first_name"
+                                className="form-control"
+                                onChange={ this.handleChange }
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="col">
+                            <label htmlFor="formGroupExampleInput">Nachname<span className="deep-orange-text pl-1">*</span></label>
+                            <input
+                              value={ this.state.last_name }
+                              type="text"
+                              name="last_name"
+                              className="form-control"
+                              onChange={ this.handleChange }
+                              required
+                            />
+                          </div>
+                        </div>
                       </div>
                       <hr />
                       { this.state.progress.lastPoint === 1 ? (
@@ -797,14 +827,22 @@ class RegisterPage extends Component {
                 )}
 
                 {this.state.formActivePanel2 === 4 && (
-                  <MDBCol md="12">
-                    <h3 className="font-weight-bold pl-0 my-4">
-                      <strong>Glückwunsch!</strong>
-                    </h3>
-                    <h2 className="text-center font-weight-bold my-4">
-                      Registrierung abgeschlossen!
-                    </h2>
-                    <p>Gleich starten und 10% beim ersten Auftrag sparen! { this.state.personalisation.informal ? ("Ziehe") : ("Ziehen Sie") } JETZT positiven Nutzen daraus.</p>
+                  <MDBCol md="6" className="m-auto step-finish my-3">
+                    <MDBCard testimonial>
+                      <MDBCardUp gradient="aqua">
+                          <h2 className="text-center font-weight-bold my-4">
+                          Registrierung abgeschlossen!
+                        </h2>
+                      </MDBCardUp> 
+                      <MDBCardBody>
+                        {this.state.personalisation.informal ? (
+                          <p className="lead">Hallo {this.state.first_name} starte gleich richtig durch und spare {this.state.first_time_balance} bei deinem ersten Auftrag!</p>
+                        ) : (
+                          <p className="lead">{this.state.personalisation.sex + " " + this.state.last_name}, starten Sie gleich richtig durch und sparen Sie {this.state.first_time_balance} bei Ihrem ersten Auftrag!"</p>
+                        )}
+                        <p>{ this.state.personalisation.informal ? ("Ziehe") : ("Ziehen Sie") } JETZT positiven Nutzen daraus.</p>
+                      </MDBCardBody>
+                    </MDBCard>
                   </MDBCol>
                 )}
               </MDBRow>
