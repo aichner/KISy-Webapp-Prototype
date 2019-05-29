@@ -10,7 +10,7 @@ import Confetti from '../../components/Confetti';
 // CSS
 import "./register.scss";
 
-const languages = [
+const companies = [
   {
     name: 'C',
     year: 1972
@@ -80,7 +80,7 @@ const getSuggestions = value => {
   }
 
   const regex = new RegExp('^' + escapedValue, 'i');
-  const suggestions = languages.filter(language => regex.test(language.name));
+  const suggestions = companies.filter(language => regex.test(language.name));
   
   if (suggestions.length === 0) {
     return [
@@ -219,25 +219,6 @@ class RegisterPage extends Component {
       }
     }));
   }
-
-  /*swapFormActive = a => param => e => {
-    if(this.checkSwap(param)){
-      console.log("Yes");
-      this.setState({
-        ["formActivePanel" + a]: param,
-        ["formActivePanel" + a + "Changed"]: true
-      });
-      this.setState(prevState => ({
-        progress: {
-          ...prevState.progress,
-          value: param * 10,
-          text: "Legen wir los!"
-        }
-      }));
-    } else {
-      console.log("Action blocked.");
-    }
-  };*/
 
   checkSwap = (param) => {
     //return true;
@@ -528,29 +509,6 @@ class RegisterPage extends Component {
               <MDBProgress material value={this.state.progress.value}>
                 {this.state.progress.text}
               </MDBProgress>
-              {/*<MDBStepper icon>
-                <MDBStep
-                  icon="folder-open"
-                  stepName="Basic Information"
-                  onClick={this.swapFormActive(2)(1)}
-                />
-                <MDBStep
-                  icon="pencil-alt"
-                  stepName="Personal Data"
-                  onClick={this.swapFormActive(2)(2)}
-                />
-                <MDBStep
-                  icon="image"
-                  stepName="Terms and Conditions"
-                  onClick={this.swapFormActive(2)(3)}
-                />
-                <MDBStep
-                  icon="check"
-                  stepName="Finish"
-                  onClick={this.swapFormActive(2)(4)}
-                />
-              </MDBStepper>*/}
-
               <div>
                 <input autoComplete="false" name="hidden" type="hidden" value="llama"/>
                 <MDBRow>
