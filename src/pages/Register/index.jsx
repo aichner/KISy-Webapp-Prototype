@@ -476,9 +476,12 @@ class RegisterPage extends Component {
         </span>
       );
     }
-
     return suggestion.name;
   };
+
+  startKIS = () => {
+    this.props.history.push('/kisy', { email: this.state.email, test: "" });
+  }
   
   render() {
     
