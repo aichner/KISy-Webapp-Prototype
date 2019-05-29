@@ -9,10 +9,14 @@
     "mdbreact": "./mdbreact-4.14.0.tgz",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
+    "react-autosuggest": "^9.4.3",
+    "react-country-flag": "^1.0.2",
     "react-dom": "^16.8.6",
     "react-facebook-login": "^4.1.1",
     "react-icons": "^3.7.0",
-    "react-scripts": "3.0.1"
+    "react-password-strength": "^2.4.0",
+    "react-scripts": "3.0.1",
+    "validate-vat": "^0.5.1"
   },
   "scripts": {
     "start": "react-scripts start",

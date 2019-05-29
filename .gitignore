@@ -9,6 +9,7 @@
 # MDB Pro
 /src/templates
 /dist
+/mdbreact-4.14.0.tgz
 
 # production
 /build
