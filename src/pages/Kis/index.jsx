@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBNavLink, MDBNavItem, MDBTabContent, MDBTabPane, MDBNav } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBNavLink, MDBNavItem, MDBTabContent, MDBTabPane, MDBNav, MDBProgress } from "mdbreact";
 import { Radar } from "react-chartjs-2";
 // Components
 // import Confetti from '../../components/Confetti';
@@ -12,9 +12,9 @@ class KISPage extends Component {
   constructor(props) {
     super(props);
     this.state={
-      personalisation: this.props.location.state.personalisation,
-      first_name: this.props.location.state.first_name,
-      last_name: this.props.location.state.last_name,
+      personalisation: this.getPersonalisationState(),
+      first_name: this.getFirstNameState(),
+      last_name: this.getLastNameState(),
       greeting: this.getGreeting(),
       activeItem: "1",
       activeItemPills: "1",
@@ -24,21 +24,45 @@ class KISPage extends Component {
       activeItemClassicTabs1: "1",
       activeItemClassicTabs2: "1",
       dataRadar: {
-        labels: ["Website", "Social Media", "Branding", "Filme", "Logo"],
+        labels: ["Website", "Social Media", "Branding", "Filme", "Logo", "Public Relations"],
         datasets: [
           {
             label: "Dein Unternehmen",
             backgroundColor: "rgba(60, 130, 255, 0.5)",
             boderColor: "rgb(60, 130, 255)",
-            data: [90, 10, 50, 30, 40]
+            data: [32, 10, 50, 30, 40, 20]
           },
           {
             label: "KELAG",
             backgroundColor: "rgba(0, 200, 0, 0.2)",
             boderColor: "rgb(0, 200, 0)",
-            data: [90, 90, 90, 90, 90]
+            data: [90, 100, 90, 90, 80, 95]
           }
         ]
+      }
+    }
+  }
+
+  getPersonalisationState = () => {
+    if(this.props.location.state !== undefined){
+      if(this.props.location.state.personalisation !== undefined){
+        return this.props.location.state.personalisation
+      }
+    }
+  }
+
+  getFirstNameState = () => {
+    if(this.props.location.state !== undefined){
+      if(this.props.location.state.first_name !== undefined){
+        return this.props.location.state.first_name
+      }
+    }
+  }
+
+  getLastNameState = () => {
+    if(this.props.location.state !== undefined){
+      if(this.props.location.state.last_name !== undefined){
+        return this.props.location.state.last_name
       }
     }
   }
@@ -70,7 +94,7 @@ class KISPage extends Component {
       case (hour >= 13 && hour < 17):
         greeting = "Schönen Nachmittag"
         break;
-      case (hour >= 17 && hour < 0):
+      case (hour >= 17 && hour < 23):
         greeting = "Guten Abend";
         break;
       default:
@@ -210,6 +234,13 @@ class KISPage extends Component {
                   <MDBCol md="6">
                     <MDBAlert color="success" dismiss onClose={()=> alert('This event fires immediately when the close instance method is called.')} onClosed={()=> alert('This event is fired when the alert has been closed (will wait for CSS transitions to complete).')}>
                       Eine neue Videovorschau ist verfügbar!
+                    </MDBAlert>
+                    <MDBAlert color="info" className="text-left">
+                    <h4 className="alert-heading">Well done!</h4>
+                      Achievement
+                      <hr />
+                      <p className="mb-0">Belohnung: 50€</p>
+                      <MDBProgress material  color="info" value={70} />
                     </MDBAlert>
                   </MDBCol>
                   <MDBCol md="4" className="py-4">

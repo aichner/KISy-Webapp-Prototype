@@ -134,7 +134,7 @@ class Routes extends React.Component {
       <Switch>
         <Route exact path="/" component={LoginPage} />
         <Route exact path="/register" component={RegisterPage} />
-        <Route exact path="/kisy" component={KisPage} />
+        <Route exact path="/kis" component={KisPage} />
         <Route exact path="/addons" component={AddonsNavPage} />
         <Route exact path="/advanced" component={AdvancedNavPage} />
         <Route exact path="/components" component={ComponentsNavPage} />

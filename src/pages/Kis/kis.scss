@@ -1,8 +1,13 @@
 .kis{
     .banner{
         width: 100%;
-        height: 150px;
+        height: 200px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border: none;
     }
+
     .classic-tabs .nav li a.active{
         border-bottom: 3px solid #2196f3;
         color: #000;
@@ -17,5 +22,17 @@
         padding: 1rem;
         box-shadow: none;
         border: 0;
+    }
+
+    /* Alert */
+    .alert{
+        .progress{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 0 0;
+            margin: 0 0;
+        }
     }
 }

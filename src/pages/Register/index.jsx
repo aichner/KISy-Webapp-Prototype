@@ -480,7 +480,7 @@ class RegisterPage extends Component {
   };
 
   startKIS = () => {
-    this.props.history.push('/kisy', { email: this.state.email, personalisation: this.state.personalisation, first_name: this.state.first_name, last_name: this.state.last_name });
+    this.props.history.push('/kis', { email: this.state.email, personalisation: this.state.personalisation, first_name: this.state.first_name, last_name: this.state.last_name });
   }
   
   render() {
