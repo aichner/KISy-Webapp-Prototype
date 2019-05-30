@@ -35,4 +35,16 @@
             margin: 0 0;
         }
     }
+
+    .orders {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        li{
+            border-left: none;
+            border-right: none;
+            i{
+                cursor: pointer;
+            }
+        }
+    }
 }

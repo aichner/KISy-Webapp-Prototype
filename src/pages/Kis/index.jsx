@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBNavLink, MDBNavItem, MDBTabContent, MDBTabPane, MDBNav, MDBProgress } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBNavLink, MDBNavItem, MDBTabContent, MDBTabPane, MDBNav, MDBProgress, MDBBadge, MDBListGroup, MDBListGroupItem, MDBIcon, MDBTooltip } from "mdbreact";
 import { Radar } from "react-chartjs-2";
 // Components
 // import Confetti from '../../components/Confetti';
@@ -7,6 +7,8 @@ import Image from '../../components/atoms/Image';
 
 // CSS
 import "./kis.scss";
+
+const c_perks = [87, 50, 65, 78, 30, 15];
 
 class KISPage extends Component {
   constructor(props) {
@@ -30,7 +32,7 @@ class KISPage extends Component {
             label: "Dein Unternehmen",
             backgroundColor: "rgba(60, 130, 255, 0.5)",
             boderColor: "rgb(60, 130, 255)",
-            data: [32, 10, 50, 30, 40, 20]
+            data: c_perks
           },
           {
             label: "KELAG",
@@ -42,6 +44,17 @@ class KISPage extends Component {
       }
     }
   }
+
+  // Start: Generic functions
+  calculateScore = () => {
+    let sum = 0;
+    for (var i = 0; i < c_perks.length; i++) {
+      sum += c_perks[i]
+    }
+    return Math.round(sum / c_perks.length);
+  }
+  
+  // End: Generic functions
 
   getPersonalisationState = () => {
     if(this.props.location.state !== undefined){
@@ -230,6 +243,9 @@ class KISPage extends Component {
                 <MDBRow className="text-center">
                   <MDBCol md="6">
                     <Radar data={this.state.dataRadar} options={{ responsive: true }} />
+                    <h3 className="mt-3">Dein Score: {this.calculateScore()}</h3>
+                    <p className="lead"><MDBBadge color="success">Besser als der Durchschnitt</MDBBadge></p>
+                    <MDBProgress value={this.calculateScore()} color="success" />
                   </MDBCol>
                   <MDBCol md="6">
                     <MDBAlert color="success" dismiss onClose={()=> alert('This event fires immediately when the close instance method is called.')} onClosed={()=> alert('This event is fired when the alert has been closed (will wait for CSS transitions to complete).')}>
@@ -251,7 +267,7 @@ class KISPage extends Component {
                           Some quick example text to build on the card title and make up
                           the bulk of the card's content.
                         </MDBCardText>
-                        <MDBBtn color="primary" size="md">
+                        <MDBBtn color="blue" size="md">
                           read more
                         </MDBBtn>
                       </MDBCardBody>
@@ -265,7 +281,7 @@ class KISPage extends Component {
                           Some quick example text to build on the card title and make up
                           the bulk of the card's content.
                         </MDBCardText>
-                        <MDBBtn color="primary" size="md">
+                        <MDBBtn color="blue" size="md">
                           read more
                         </MDBBtn>
                       </MDBCardBody>
@@ -273,14 +289,60 @@ class KISPage extends Component {
                   </MDBCol>
                   <MDBCol md="4" className="py-4">
                     <MDBCard>
-                      <MDBCardBody>
-                        <MDBCardTitle tag="h5">Panel title</MDBCardTitle>
-                        <MDBCardText>
-                          Some quick example text to build on the card title and make up
-                          the bulk of the card's content.
-                        </MDBCardText>
-                        <MDBBtn color="primary" size="md">
-                          read more
+                      <MDBCardBody className="orders">
+                        <MDBCardTitle tag="h5">Ihre Aufträge</MDBCardTitle>
+                          <MDBListGroup className="my-4">
+                            <MDBListGroupItem hover className="d-flex justify-content-between align-items-center text-left">
+                              <div>
+                                <p className="my-0">Digital Day Videoproduktion</p>
+                                <small className="text-muted">RE-2018-0014</small>
+                              </div>
+                              <span>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span>Details anzeigen</span>
+                                </MDBTooltip>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span>Rechnung herunterladen (PDF)</span>
+                                </MDBTooltip>
+                              </span>
+                            </MDBListGroupItem>
+                            <MDBListGroupItem hover className="d-flex justify-content-between align-items-center text-left">
+                              <div>
+                                <p className="my-0">Kraftwerk Schütt Videoproduktion</p>
+                                <small className="text-muted">RE-2018-0015</small>
+                              </div>
+                              <span>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span>Details anzeigen</span>
+                                </MDBTooltip>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span>Rechnung herunterladen (PDF)</span>
+                                </MDBTooltip>
+                              </span>
+                            </MDBListGroupItem>
+                            <MDBListGroupItem hover className="d-flex justify-content-between align-items-center text-left">
+                              <div>
+                                <p className="my-0">Große KELAG Videoproduktion</p>
+                                <small className="text-muted">RE-2018-0016</small>
+                              </div>
+                              <span>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span>Details anzeigen</span>
+                                </MDBTooltip>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span>Rechnung herunterladen (PDF)</span>
+                                </MDBTooltip>
+                              </span>
+                            </MDBListGroupItem>
+                          </MDBListGroup>
+                        <MDBBtn color="blue" size="md" onClick={this.toggleClassicTabs1("2")}>
+                          Alle Aufträge anzeigen
                         </MDBBtn>
                       </MDBCardBody>
                     </MDBCard>
