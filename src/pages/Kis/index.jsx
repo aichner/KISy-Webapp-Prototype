@@ -204,7 +204,7 @@ class KISPage extends Component {
                   className={this.state.activeItemClassicTabs1 === "1" ? "font-weight-bold active blue-text" : "font-weight-bold"}
                   onClick={this.toggleClassicTabs1("1")}
                 >
-                  Übersicht
+                  <MDBIcon icon="columns" className="pr-2" />Übersicht
                 </MDBNavLink>
               </MDBNavItem>
               <MDBNavItem>
@@ -213,7 +213,7 @@ class KISPage extends Component {
                   className={this.state.activeItemClassicTabs1 === "2" ? "font-weight-bold active blue-text" : "font-weight-bold"}
                   onClick={this.toggleClassicTabs1("2")}
                 >
-                  Aufträge
+                  <MDBIcon icon="list-ul" className="pr-2" />Aufträge
                 </MDBNavLink>
               </MDBNavItem>
               <MDBNavItem>
@@ -222,7 +222,7 @@ class KISPage extends Component {
                   className={this.state.activeItemClassicTabs1 === "3" ? "font-weight-bold active blue-text" : "font-weight-bold"}
                   onClick={this.toggleClassicTabs1("3")}
                 >
-                  Statistik
+                  <MDBIcon icon="chart-line" className="pr-2" />Statistik
                 </MDBNavLink>
               </MDBNavItem>
               <MDBNavItem>
@@ -231,7 +231,7 @@ class KISPage extends Component {
                   className={this.state.activeItemClassicTabs1 === "4" ? "font-weight-bold active blue-text" : "font-weight-bold"}
                   onClick={this.toggleClassicTabs1("4")}
                 >
-                  Meine Daten
+                  <MDBIcon far icon="user" className="pr-2" />Meine Daten
                 </MDBNavLink>
               </MDBNavItem>
             </MDBNav>
