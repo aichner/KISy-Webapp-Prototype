@@ -3,7 +3,6 @@ import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTi
 import { Radar } from "react-chartjs-2";
 // Components
 // import Confetti from '../../components/Confetti';
-import Image from '../../components/atoms/Image';
 
 // CSS
 import "./kis.scss";
@@ -191,7 +190,7 @@ class KISPage extends Component {
   render() {
     return (
       <div className="kis">
-        <Image className="banner" />
+        <div className="banner img-night" ></div>
           <div className="greeting text-center py-3">
             <h2>{this.state.greeting}</h2>
           </div>
