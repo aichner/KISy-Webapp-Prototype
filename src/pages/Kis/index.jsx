@@ -34,12 +34,12 @@ class KISPage extends Component {
             boderColor: "rgb(60, 130, 255)",
             data: c_perks
           },
-          {
+          /*{
             label: "KELAG",
             backgroundColor: "rgba(0, 200, 0, 0.2)",
             boderColor: "rgb(0, 200, 0)",
             data: [90, 100, 90, 90, 80, 95]
-          }
+          }*/
         ]
       }
     }
@@ -251,7 +251,7 @@ class KISPage extends Component {
               <MDBTabPane tabId="1">
                 <MDBRow className="text-center">
                   <MDBCol md="6">
-                    <Radar data={this.state.dataRadar} options={{ responsive: true }} />
+                    <Radar data={this.state.dataRadar} options={{responsive: true, scale: {ticks: {max: 100}}}} />
                     <h3 className="mt-3">Dein Score: {this.calculateScore()}</h3>
                     <p className="lead"><MDBBadge color="success">Besser als der Durchschnitt</MDBBadge></p>
                     <MDBProgress value={this.calculateScore()} color="success" />
