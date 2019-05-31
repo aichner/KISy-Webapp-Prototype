@@ -6,6 +6,7 @@ import { Radar } from "react-chartjs-2";
 
 // CSS
 import "./kis.scss";
+import "./images.scss";
 
 const c_perks = [87, 50, 65, 78, 30, 15];
 
@@ -88,29 +89,38 @@ class KISPage extends Component {
     let greeting = "Guten Tag";
     let name = undefined;
     let message = "";
+    let image = "";
+    let random = Math.floor(Math.random() * 3) + 1;
 
     // Check for time and set greeting accordingly
     switch(true){
       case (hour >= 0 && hour < 4):
         greeting = "Geh schlafen";
+        image = "img-night"+random;
         break;
       case (hour >= 4 && hour < 9):
         greeting = "Guten Morgen";
+        image = "img-morning"+random;
         break;
       case (hour >= 9 && hour < 12):
         greeting = "Schönen Vormittag";
+        image = "img-midmorning"+random;
         break;
       case (hour >= 12 && hour < 13):
         greeting = "Mahlzeit";
+        image = "img-midday"+random;
         break;
       case (hour >= 13 && hour < 17):
         greeting = "Schönen Nachmittag"
+        image = "img-afternoon"+random;
         break;
       case (hour >= 17 && hour < 23):
         greeting = "Guten Abend";
+        image = "img-evening"+random;
         break;
       default:
         greeting = "Hallo";
+        image = "img-night"+random;;
     }
 
     // Check if the person wants an informal greeting
@@ -129,7 +139,7 @@ class KISPage extends Component {
       message = "Hallo!";
     }
     // Sets greeting state
-    return message;
+    return {msg: message, img: "banner "+image};
   }
 
    toggle = tab => e => {
@@ -190,9 +200,9 @@ class KISPage extends Component {
   render() {
     return (
       <div className="kis">
-        <div className="banner img-night" ></div>
+        <div className={this.state.greeting.img} ></div>
           <div className="greeting text-center py-3">
-            <h2>{this.state.greeting}</h2>
+            <h2>{this.state.greeting.msg}</h2>
           </div>
           <MDBContainer>
           <div className="classic-tabs">
