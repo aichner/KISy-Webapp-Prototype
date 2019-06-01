@@ -1,0 +1,51 @@
+.kis{
+    .banner{
+        margin-top: 2rem;
+        width: 100%;
+        height: 200px;
+        background-position: center center;
+        border: none;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    .classic-tabs .nav li a.active{
+        border-bottom: 3px solid #2196f3;
+        color: #000;
+    }
+    .classic-tabs .nav li a{
+        color: rgba(0, 0, 0, 0.8);
+        font-size: 15px;
+
+    }
+    
+    .tab-content{
+        padding: 1rem;
+        box-shadow: none;
+        border: 0;
+    }
+
+    /* Alert */
+    .alert{
+        .progress{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 0 0;
+            margin: 0 0;
+        }
+    }
+
+    .orders {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        li{
+            border-left: none;
+            border-right: none;
+            i{
+                cursor: pointer;
+            }
+        }
+    }
+}

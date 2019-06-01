@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 // Pages
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
+import KisPage from "./pages/Kis";
 
 
 // Templates
@@ -133,6 +134,7 @@ class Routes extends React.Component {
       <Switch>
         <Route exact path="/" component={LoginPage} />
         <Route exact path="/register" component={RegisterPage} />
+        <Route exact path="/kis" component={KisPage} />
         <Route exact path="/addons" component={AddonsNavPage} />
         <Route exact path="/advanced" component={AdvancedNavPage} />
         <Route exact path="/components" component={ComponentsNavPage} />
