@@ -304,16 +304,22 @@ class KISPage extends Component {
                             <MDBListGroupItem hover className="d-flex justify-content-between align-items-center text-left">
                               <div>
                                 <p className="my-0">Digital Day Videoproduktion</p>
-                                <small className="text-muted">RE-2018-0014</small>
+                                <small className="text-muted">RE-2018-0016</small>
                               </div>
-                              <span>
+                              <span className="order-info">
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span><MDBIcon icon="eye" /></span>
                                   <span>Details anzeigen</span>
                                 </MDBTooltip>
+                                <div className="spacer"></div>
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span><MDBIcon icon="file-invoice-dollar" /></span>
                                   <span>Rechnung herunterladen (PDF)</span>
+                                </MDBTooltip>
+                                <div className="spacer"></div>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="dollar-sign" color="red" /></span>
+                                  <span>Rechnung bezahlen</span>
                                 </MDBTooltip>
                               </span>
                             </MDBListGroupItem>
@@ -322,29 +328,36 @@ class KISPage extends Component {
                                 <p className="my-0">Kraftwerk Schütt Videoproduktion</p>
                                 <small className="text-muted">RE-2018-0015</small>
                               </div>
-                              <span>
+                              <span className="order-info">
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span><MDBIcon icon="eye" /></span>
                                   <span>Details anzeigen</span>
                                 </MDBTooltip>
+                                <div className="spacer"></div>
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span><MDBIcon icon="file-invoice-dollar" /></span>
                                   <span>Rechnung herunterladen (PDF)</span>
+                                </MDBTooltip>
+                                <div className="spacer"></div>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="dollar-sign" color="red" /></span>
+                                  <span>Rechnung bezahlen</span>
                                 </MDBTooltip>
                               </span>
                             </MDBListGroupItem>
                             <MDBListGroupItem hover className="d-flex justify-content-between align-items-center text-left">
                               <div>
                                 <p className="my-0">Große KELAG Videoproduktion</p>
-                                <small className="text-muted">RE-2018-0016</small>
+                                <small className="text-muted">RE-2018-0014</small>
                               </div>
-                              <span>
+                              <span className="order-info">
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span><MDBIcon icon="eye" /></span>
                                   <span>Details anzeigen</span>
                                 </MDBTooltip>
+                                <div className="spacer"></div>
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span><MDBIcon icon="file-invoice-dollar" /></span>
                                   <span>Rechnung herunterladen (PDF)</span>
                                 </MDBTooltip>
                               </span>
