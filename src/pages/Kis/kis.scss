@@ -67,4 +67,18 @@
         }
         
     }
+    /* Chart */
+    .score-board{
+        /* Average indicator */
+        .progress{
+            &::after{
+                content: '';
+                left: 70%;
+                width: 4px;
+                height: 15px;
+                position: absolute;
+                background-color: #4b4b4b;
+            }
+        }
+    }
 }

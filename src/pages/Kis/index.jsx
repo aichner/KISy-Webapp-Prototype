@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBNavLink, MDBNavItem, MDBTabContent, MDBTabPane, MDBNav, MDBProgress, MDBBadge, MDBListGroup, MDBListGroupItem, MDBIcon, MDBTooltip } from "mdbreact";
-import { Radar } from "react-chartjs-2";
+import ScoreChart from "../../components/molecules/ScoreChart"
 // Components
 // import Confetti from '../../components/Confetti';
 
@@ -8,6 +8,7 @@ import { Radar } from "react-chartjs-2";
 import "./kis.scss";
 import "./images.scss";
 
+const c_perks_average = 80;
 const c_perks = [87, 50, 65, 78, 30, 15];
 
 class KISPage extends Component {
@@ -250,11 +251,22 @@ class KISPage extends Component {
             >
               <MDBTabPane tabId="1">
                 <MDBRow className="text-center">
-                  <MDBCol md="6">
-                    <Radar data={this.state.dataRadar} options={{responsive: true, scale: {ticks: {max: 100}}}} />
+                  <MDBCol md="6" className="score-board">
+                    <ScoreChart data={this.state.dataRadar} />
                     <h3 className="mt-3">Dein Score: {this.calculateScore()}</h3>
-                    <p className="lead"><MDBBadge color="success">Besser als der Durchschnitt</MDBBadge></p>
-                    <MDBProgress value={this.calculateScore()} color="success" />
+                    {this.calculateScore() > c_perks_average ? (
+                      <div>
+                        <p className="lead"><MDBBadge color="success">Besser als der Durchschnitt</MDBBadge></p>
+                        <MDBProgress value={this.calculateScore()} color="success" />
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="lead"><MDBBadge color="danger">Schlechter als der Durchschnitt</MDBBadge></p>
+                        <MDBProgress value={this.calculateScore()} color="danger" />
+                      </div>
+                    )}
+                    
+                   
                   </MDBCol>
                   <MDBCol md="6">
                     <MDBAlert color="success" dismiss onClose={()=> alert('This event fires immediately when the close instance method is called.')} onClosed={()=> alert('This event is fired when the alert has been closed (will wait for CSS transitions to complete).')}>
@@ -382,11 +394,7 @@ class KISPage extends Component {
               </MDBTabPane>
               <MDBTabPane tabId="3">
                 <p>
-                  Quisquam aperiam, pariatur. Tempora, placeat ratione
-                  porro voluptate odit minima. Lorem ipsum dolor sit amet,
-                  consectetur adipisicing elit. Nihil odit magnam minima,
-                  soluta doloribus reiciendis molestiae placeat unde eos
-                  molestias.
+                  <ScoreChart data={this.state.dataRadar} />
                 </p>
               </MDBTabPane>
               <MDBTabPane tabId="4">
