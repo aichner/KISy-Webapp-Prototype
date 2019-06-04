@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBNavLink, MDBNavItem, MDBTabContent, MDBTabPane, MDBNav, MDBProgress, MDBBadge, MDBListGroup, MDBListGroupItem, MDBIcon, MDBTooltip } from "mdbreact";
+// Score Radar chart
 import ScoreChart from "../../components/molecules/ScoreChart"
 // Components
 // import Confetti from '../../components/Confetti';
@@ -10,6 +11,10 @@ import "./images.scss";
 
 const c_perks_average = 80;
 const c_perks = [87, 50, 65, 78, 30, 15];
+const c_compare = [
+  [20,20,20,20,20,20],
+  [10,10,10,10,10,10]
+]
 
 class KISPage extends Component {
   constructor(props) {
@@ -26,23 +31,6 @@ class KISPage extends Component {
       activeItemInnerPills: "1",
       activeItemClassicTabs1: "1",
       activeItemClassicTabs2: "1",
-      dataRadar: {
-        labels: ["Website", "Social Media", "Branding", "Filme", "Logo", "Public Relations"],
-        datasets: [
-          {
-            label: "Dein Unternehmen",
-            backgroundColor: "rgba(60, 130, 255, 0.5)",
-            boderColor: "rgb(60, 130, 255)",
-            data: c_perks
-          },
-          /*{
-            label: "KELAG",
-            backgroundColor: "rgba(0, 200, 0, 0.2)",
-            boderColor: "rgb(0, 200, 0)",
-            data: [90, 100, 90, 90, 80, 95]
-          }*/
-        ]
-      }
     }
   }
 
@@ -252,7 +240,7 @@ class KISPage extends Component {
               <MDBTabPane tabId="1">
                 <MDBRow className="text-center">
                   <MDBCol md="6" className="score-board">
-                    <ScoreChart data={this.state.dataRadar} />
+                    <ScoreChart perks={c_perks} compare={c_compare}/>
                     <h3 className="mt-3">Dein Score: {this.calculateScore()}</h3>
                     {this.calculateScore() > c_perks_average ? (
                       <div>
@@ -394,7 +382,7 @@ class KISPage extends Component {
               </MDBTabPane>
               <MDBTabPane tabId="3">
                 <p>
-                  <ScoreChart data={this.state.dataRadar} />
+                  <ScoreChart perks={c_perks} compare={c_compare}/>
                 </p>
               </MDBTabPane>
               <MDBTabPane tabId="4">
