@@ -1,14 +1,20 @@
 import React, { Component } from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn, MDBNavLink, MDBNavItem, MDBTabContent, MDBTabPane, MDBNav, MDBProgress, MDBBadge, MDBListGroup, MDBListGroupItem, MDBIcon, MDBTooltip } from "mdbreact";
-import { Radar } from "react-chartjs-2";
+// Score Radar chart
+import ScoreChart from "../../components/molecules/ScoreChart"
 // Components
-// import Confetti from '../../components/Confetti';
+// import Confetti from '../../components/molecules/Confetti';
 
 // CSS
 import "./kis.scss";
 import "./images.scss";
 
+const c_perks_average = 80;
 const c_perks = [87, 50, 65, 78, 30, 15];
+const c_compare = [
+  [20,20,20,20,20,20],
+  [10,10,10,10,10,10]
+]
 
 class KISPage extends Component {
   constructor(props) {
@@ -25,23 +31,6 @@ class KISPage extends Component {
       activeItemInnerPills: "1",
       activeItemClassicTabs1: "1",
       activeItemClassicTabs2: "1",
-      dataRadar: {
-        labels: ["Website", "Social Media", "Branding", "Filme", "Logo", "Public Relations"],
-        datasets: [
-          {
-            label: "Dein Unternehmen",
-            backgroundColor: "rgba(60, 130, 255, 0.5)",
-            boderColor: "rgb(60, 130, 255)",
-            data: c_perks
-          },
-          /*{
-            label: "KELAG",
-            backgroundColor: "rgba(0, 200, 0, 0.2)",
-            boderColor: "rgb(0, 200, 0)",
-            data: [90, 100, 90, 90, 80, 95]
-          }*/
-        ]
-      }
     }
   }
 
@@ -250,11 +239,22 @@ class KISPage extends Component {
             >
               <MDBTabPane tabId="1">
                 <MDBRow className="text-center">
-                  <MDBCol md="6">
-                    <Radar data={this.state.dataRadar} options={{responsive: true, scale: {ticks: {max: 100}}}} />
+                  <MDBCol md="6" className="score-board">
+                    <ScoreChart perks={c_perks} compare={c_compare}/>
                     <h3 className="mt-3">Dein Score: {this.calculateScore()}</h3>
-                    <p className="lead"><MDBBadge color="success">Besser als der Durchschnitt</MDBBadge></p>
-                    <MDBProgress value={this.calculateScore()} color="success" />
+                    {this.calculateScore() > c_perks_average ? (
+                      <div>
+                        <p className="lead"><MDBBadge color="success">Besser als der Durchschnitt</MDBBadge></p>
+                        <MDBProgress value={this.calculateScore()} color="success" />
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="lead"><MDBBadge color="danger">Schlechter als der Durchschnitt</MDBBadge></p>
+                        <MDBProgress value={this.calculateScore()} color="danger" />
+                      </div>
+                    )}
+                    
+                   
                   </MDBCol>
                   <MDBCol md="6">
                     <MDBAlert color="success" dismiss onClose={()=> alert('This event fires immediately when the close instance method is called.')} onClosed={()=> alert('This event is fired when the alert has been closed (will wait for CSS transitions to complete).')}>
@@ -304,16 +304,22 @@ class KISPage extends Component {
                             <MDBListGroupItem hover className="d-flex justify-content-between align-items-center text-left">
                               <div>
                                 <p className="my-0">Digital Day Videoproduktion</p>
-                                <small className="text-muted">RE-2018-0014</small>
+                                <small className="text-muted">RE-2018-0016</small>
                               </div>
-                              <span>
+                              <span className="order-info">
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span><MDBIcon icon="eye" /></span>
                                   <span>Details anzeigen</span>
                                 </MDBTooltip>
+                                <div className="spacer"></div>
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span><MDBIcon icon="file-invoice-dollar" /></span>
                                   <span>Rechnung herunterladen (PDF)</span>
+                                </MDBTooltip>
+                                <div className="spacer"></div>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="dollar-sign" color="red" /></span>
+                                  <span>Rechnung bezahlen</span>
                                 </MDBTooltip>
                               </span>
                             </MDBListGroupItem>
@@ -322,29 +328,36 @@ class KISPage extends Component {
                                 <p className="my-0">Kraftwerk Schütt Videoproduktion</p>
                                 <small className="text-muted">RE-2018-0015</small>
                               </div>
-                              <span>
+                              <span className="order-info">
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span><MDBIcon icon="eye" /></span>
                                   <span>Details anzeigen</span>
                                 </MDBTooltip>
+                                <div className="spacer"></div>
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span><MDBIcon icon="file-invoice-dollar" /></span>
                                   <span>Rechnung herunterladen (PDF)</span>
+                                </MDBTooltip>
+                                <div className="spacer"></div>
+                                <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
+                                  <span><MDBIcon icon="dollar-sign" color="red" /></span>
+                                  <span>Rechnung bezahlen</span>
                                 </MDBTooltip>
                               </span>
                             </MDBListGroupItem>
                             <MDBListGroupItem hover className="d-flex justify-content-between align-items-center text-left">
                               <div>
                                 <p className="my-0">Große KELAG Videoproduktion</p>
-                                <small className="text-muted">RE-2018-0016</small>
+                                <small className="text-muted">RE-2018-0014</small>
                               </div>
-                              <span>
+                              <span className="order-info">
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="eye" className="pr-2" /></span>
+                                  <span><MDBIcon icon="eye" /></span>
                                   <span>Details anzeigen</span>
                                 </MDBTooltip>
+                                <div className="spacer"></div>
                                 <MDBTooltip domElement tag='span' style={{ display: 'inline' }} placement="top">
-                                  <span><MDBIcon icon="file-invoice-dollar" className="pl-2" /></span>
+                                  <span><MDBIcon icon="file-invoice-dollar" /></span>
                                   <span>Rechnung herunterladen (PDF)</span>
                                 </MDBTooltip>
                               </span>
@@ -369,11 +382,7 @@ class KISPage extends Component {
               </MDBTabPane>
               <MDBTabPane tabId="3">
                 <p>
-                  Quisquam aperiam, pariatur. Tempora, placeat ratione
-                  porro voluptate odit minima. Lorem ipsum dolor sit amet,
-                  consectetur adipisicing elit. Nihil odit magnam minima,
-                  soluta doloribus reiciendis molestiae placeat unde eos
-                  molestias.
+                  <ScoreChart perks={c_perks} compare={c_compare}/>
                 </p>
               </MDBTabPane>
               <MDBTabPane tabId="4">
