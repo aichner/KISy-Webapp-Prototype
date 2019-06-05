@@ -3,7 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBProgress, MDBRangeIn
 import ReactPasswordStrength from 'react-password-strength';
 import Autosuggest from 'react-autosuggest';
 // Components
-import Confetti from '../../components/Confetti';
+import Confetti from '../../components/molecules/Confetti';
 
 // Icons
 // import { FaFacebook } from 'react-icons/fa';

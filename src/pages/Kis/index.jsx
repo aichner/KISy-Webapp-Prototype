@@ -3,7 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTi
 // Score Radar chart
 import ScoreChart from "../../components/molecules/ScoreChart"
 // Components
-// import Confetti from '../../components/Confetti';
+// import Confetti from '../../components/molecules/Confetti';
 
 // CSS
 import "./kis.scss";
