@@ -26,47 +26,6 @@
         border: 0;
     }
 
-    /* Alert */
-    .alert{
-        .progress{
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            padding: 0 0;
-            margin: 0 0;
-        }
-    }
-
-    /* Order list */
-
-    .orders {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        li{
-            border-left: none;
-            border-right: none;
-            i{
-                cursor: pointer;
-            }
-        }
-        .order-info{
-            display: flex;
-            .spacer{
-                margin: 0 .4rem 0 .4rem;
-            }
-            .fa{
-                transition: all .1s ease;
-            }
-            .fa-dollar-sign{
-                color: green;
-            }
-            .fa-dollar-sign:hover{
-                color: rgb(0,150,0);
-            }
-        }
-        
-    }
     /* Chart */
     .score-board{
         /* Average indicator */
