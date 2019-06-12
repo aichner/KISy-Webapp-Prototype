@@ -35,7 +35,7 @@ class KISPage extends Component {
       activeItemOuterTabs: "1",
       activeItemInnerPills: "1",
       activeItemClassicTabs1: "1",
-      activeItemClassicTabs2: "1",
+      activeItemClassicTabs2: "1"
     }
   }
 
