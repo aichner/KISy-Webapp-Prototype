@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MDBTabPane } from "mdbreact";
+import { MDBTabPane, MDBRow } from "mdbreact";
 
 class Tab extends Component {
     render() {

@@ -4,7 +4,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBCard, MDBCardBody, MDBCardTi
 import ScoreChart from "../../components/molecules/ScoreChart"
 // Components
 // import Confetti from '../../components/molecules/Confetti';
-
+import Tab from "../../components/molecules/Tab"
 // CSS
 import "./kis.scss";
 import "./images.scss";
@@ -193,6 +193,7 @@ class KISPage extends Component {
           <div className="greeting text-center py-3">
             <h2>{this.state.greeting.msg}</h2>
           </div>
+
           <MDBContainer>
           <div className="classic-tabs">
             <MDBNav classicTabs color="white">
@@ -237,9 +238,8 @@ class KISPage extends Component {
               activeItem={this.state.activeItemClassicTabs1}
               className="pt-3"
             >
-              <MDBTabPane tabId="1">
-                <MDBRow className="text-center">
-                  <MDBCol md="6" className="score-board">
+                <Tab tabId="1">
+                <MDBCol md="6" className="score-board">
                     <ScoreChart perks={c_perks} compare={c_compare}/>
                     <h3 className="mt-3">Dein Score: {this.calculateScore()}</h3>
                     {this.calculateScore() > c_perks_average ? (
@@ -369,9 +369,8 @@ class KISPage extends Component {
                       </MDBCardBody>
                     </MDBCard>
                   </MDBCol>
-                </MDBRow>
-              </MDBTabPane>
-              <MDBTabPane tabId="2">
+                </Tab>
+              <Tab tabId="2">
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipisicing
                   elit. Nihil odit magnam minima, soluta doloribus
@@ -379,13 +378,13 @@ class KISPage extends Component {
                   Quisquam aperiam, pariatur. Tempora, placeat ratione
                   porro voluptate odit minima.
                 </p>
-              </MDBTabPane>
-              <MDBTabPane tabId="3">
+              </Tab>
+              <Tab tabId="3">
                 <p>
                   <ScoreChart perks={c_perks} compare={c_compare}/>
                 </p>
-              </MDBTabPane>
-              <MDBTabPane tabId="4">
+              </Tab>
+              <Tab tabId="4">
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipisicing
                   elit. Nihil odit magnam minima, soluta doloribus
@@ -393,7 +392,7 @@ class KISPage extends Component {
                   Quisquam aperiam, pariatur. Tempora, placeat ratione
                   porro voluptate odit minima.
                 </p>
-              </MDBTabPane>
+              </Tab>
             </MDBTabContent>
           </div>
         </MDBContainer>
