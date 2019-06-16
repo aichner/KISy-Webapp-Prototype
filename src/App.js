@@ -1,8 +1,38 @@
 import React, { Component } from "react";
+// Apollo
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-cache-inmemory";
+import { ApolloProvider } from "react-apollo";
+// MDB
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse,   MDBNavItem, MDBFooter, MDBNavLink } from "mdbreact";
 import { ReactComponent as Logo } from './assets/logo.svg';
+// Router
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./Routes";
+
+export const APIHost = 'https://aichnerc.at';
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData: {
+    __schema: {
+      types: [], // no types provided - works
+    },
+  },
+});
+
+const cache = new InMemoryCache({ fragmentMatcher });
+
+const APILink = APIHost+"/api/graphql";
+
+// console.log(APILink);
+
+// Apollo client setup
+const client = new ApolloClient({
+  cache,
+  link: new HttpLink({ uri: APILink })
+});
+
 
 class App extends Component {
 
@@ -31,8 +61,8 @@ class App extends Component {
     const { collapseID } = this.state;
 
     return (
+      <ApolloProvider client={client}>
       <Router>
-      
         <div className="flyout">
           <MDBNavbar color="blue" dark expand="md" fixed="top" scrolling>
             <MDBNavbarBrand href="/">
@@ -143,6 +173,7 @@ class App extends Component {
           </MDBFooter>
         </div>
       </Router>
+      </ApolloProvider>
     );
   }
 }
