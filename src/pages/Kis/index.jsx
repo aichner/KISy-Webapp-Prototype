@@ -1,5 +1,14 @@
 import React, { Component } from "react";
+// Apollo
+import { graphql } from "react-apollo";
+import {
+  APIHost
+} from "../../App"
+// Features
+import { RingLoader } from 'react-spinners';
+// MDB
 import { MDBContainer, MDBNavLink, MDBNavItem, MDBTabContent, MDBNav, MDBIcon } from "mdbreact";
+
 // Components
 // import Confetti from '../../components/molecules/Confetti';
 
