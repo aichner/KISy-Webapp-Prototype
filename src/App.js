@@ -11,7 +11,7 @@ import { ReactComponent as Logo } from './assets/logo.svg';
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./Routes";
 
-export const APIHost = 'https://aichnerc.at';
+export const APIHost = 'https://pharmaziegasse.at';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {

@@ -1,10 +1,48 @@
 import React, { Component } from "react";
+// Apollo
+import { graphql } from 'react-apollo';
+import { gql } from "apollo-boost";
+// MDB
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
 import FacebookLogin from 'react-facebook-login';
 // Icons
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
 import "./login.scss";
+
+const LOGIN_USER_MUTATION = gql`
+  mutation login(
+    $name: String!
+    $psw: String!
+    ) {
+    login
+    (username: $name
+    password: $psw
+    ) {
+      user{
+        id
+        username
+        isActive
+        email
+        firstName
+      }
+    }
+  }
+`;
+
+/*const LOGIN_USER_MUTATION = gql`
+  mutation login{
+    login(username: "cisco", password: "ciscocisco"){
+      user{
+        id
+        username
+        isActive
+        email
+        firstName
+      }
+    }
+  }
+`;*/
 
 class LoginPage extends Component {
   constructor(props) {
@@ -75,13 +113,14 @@ class LoginPage extends Component {
 
     // Check if user exists
     // If not: Show dialog that asks if the user wants to create a new user using the provided email and password
-    this.gotoRegistration();
+    // this.gotoRegistration();
     // If yes: Proceed to KIS user area
     // this.gotoKIS();
+    this.sendData();
   }
 
-  gotoKIS = () => {
-    this.props.history.push('/kisy', { state: "value" });
+  gotoKIS = (id) => {
+    this.props.history.push('/kis', { customerID: id });
   }
 
   gotoRegistration = () => {
@@ -99,6 +138,22 @@ class LoginPage extends Component {
       this.props.history.push('/forgot');
     }
   }
+
+  sendData = async () => {
+    this.props.mutate({
+      variables: {"name": "cisco", "psw": this.state.password}
+    })
+    .then(({ data }) => {
+      console.log(data.login);
+      if(data.login.user.id !== "-1"){
+        this.gotoKIS(data.login.user.id);
+      } else {
+        console.log("Nope");
+      }
+    }).catch((error) => {
+      console.warn('there was an error sending the query', error);
+    });
+  };
 
   render() {
     return (
@@ -186,4 +241,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default graphql(LOGIN_USER_MUTATION)(LoginPage);
