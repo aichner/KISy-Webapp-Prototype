@@ -11,38 +11,18 @@ import FacebookLogin from 'react-facebook-login';
 import "./login.scss";
 
 const LOGIN_USER_MUTATION = gql`
-  mutation login(
-    $name: String!
-    $psw: String!
-    ) {
-    login
-    (username: $name
-    password: $psw
-    ) {
-      user{
-        id
-        username
-        isActive
-        email
-        firstName
-      }
+  mutation gettoken(
+    $username: String!
+    $password: String!
+  ) {
+    tokenAuth(
+      username: $username
+      password: $password
+    ){
+      token
     }
   }
 `;
-
-/*const LOGIN_USER_MUTATION = gql`
-  mutation login{
-    login(username: "cisco", password: "ciscocisco"){
-      user{
-        id
-        username
-        isActive
-        email
-        firstName
-      }
-    }
-  }
-`;*/
 
 class LoginPage extends Component {
   constructor(props) {
@@ -141,12 +121,12 @@ class LoginPage extends Component {
 
   sendData = async () => {
     this.props.mutate({
-      variables: {"name": "cisco", "psw": this.state.password}
+      variables: {"username": "cisco", "password": this.state.password}
     })
     .then(({ data }) => {
-      console.log(data.login);
-      if(data.login.user.id !== "-1"){
-        this.gotoKIS(data.login.user.id);
+      console.log(data.tokenAuth);
+      if(data.tokenAuth.__typename === "ObtainJSONWebToken" && data.tokenAuth.token !== ""){
+        this.gotoKIS(data.tokenAuth.token);
       } else {
         console.log("Nope");
       }
