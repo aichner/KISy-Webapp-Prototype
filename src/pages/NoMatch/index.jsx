@@ -1,18 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 // MDB
-import { MDBContainer, MDBNavLink, MDBNavItem, MDBTabContent, MDBNav, MDBIcon } from "mdbreact";
+import { MDBContainer } from "mdbreact";
 
 // CSS
 import "./nomatch.scss";
 import "./images.scss";
 
 class NoMatch extends Component {
-  constructor(props) {
-    super(props);
-
-  }
-
   getImage = () => {
       let random = Math.floor(Math.random() * 4) + 1;
       let image = "banner nomatch-"+random;
