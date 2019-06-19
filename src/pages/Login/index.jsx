@@ -31,7 +31,8 @@ class LoginPage extends Component {
       email: '',
       password: '',
       oAuth: false,
-      fb_data: undefined
+      fb_data: undefined,
+      status: undefined
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -123,14 +124,15 @@ class LoginPage extends Component {
     this.props.mutate({
       variables: {"username": "cisco", "password": this.state.password}
     })
-    .then(({ data }) => {
-      console.log(data.tokenAuth);
+    .then(({ loading, data }) => {
+
       if(data.tokenAuth.__typename === "ObtainJSONWebToken" && data.tokenAuth.token !== ""){
         this.gotoKIS(data.tokenAuth.token);
       } else {
         console.log("Nope");
       }
-    }).catch((error) => {
+    }).catch((loading, error) => {
+      
       console.warn('there was an error sending the query', error);
     });
   };
