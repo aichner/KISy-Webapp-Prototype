@@ -247,7 +247,7 @@ class LoginPage extends Component {
           </MDBCol>
         </MDBRow>
         <hr className="my-5" />
-        {this.state.loading && <RingLoader /> }
+        {/*this.state.loading && <RingLoader /> */}
       </MDBContainer>
     );
   }
