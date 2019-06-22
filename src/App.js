@@ -5,11 +5,13 @@ import { HttpLink } from "apollo-link-http";
 import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo";
 // MDB
-import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBFooter } from "mdbreact";
-import { ReactComponent as Logo } from './assets/logo.svg';
+import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBFooter, MDBNavItem, MDBNavLink } from "mdbreact";
+import logo from './assets/logo_h50.png';
 // Router
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./Routes";
+
+import './style.scss';
 
 export const APIHost = 'https://kys.erebos.xyz';
 
@@ -64,18 +66,37 @@ class App extends Component {
       <ApolloProvider client={client}>
       <Router>
         <div className="flyout">
-          <MDBNavbar color="blue" dark expand="md" fixed="top" scrolling>
-            <MDBNavbarBrand href="/">
-              <Logo style={{ height: '2.5rem', width: "2.5rem" }} />
-              KISy
-            </MDBNavbarBrand>
+          <MDBNavbar color="white" light expand="md" fixed="top" scrolling>
+            
             <MDBNavbarToggler onClick={this.toggleCollapse("mainNavbarCollapse")} />
             <MDBCollapse
               id="mainNavbarCollapse"
               isOpen={this.state.collapseID}
               navbar
             >
-              <MDBNavbarNav right>
+            
+              <MDBNavbarNav center>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse("mainNavbarCollapse")}
+                    to="/test"
+                  >
+                    Test Link
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavbarBrand className="ml-2 mr-2" href="/">
+                    <img src={logo} alt="Company logo" className="img-fluid"/>
+                  </MDBNavbarBrand>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse("mainNavbarCollapse")}
+                    to="/test"
+                  >
+                    Test Link
+                  </MDBNavLink>
+                </MDBNavItem>
                 {/*<MDBNavItem>
                   <MDBNavLink
                     exact
@@ -140,14 +161,6 @@ class App extends Component {
                   >
                     Modals
                   </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/addons"
-                  >
-                    Addons
-                  </MDBNavLink>
                 </MDBNavItem>*/}
                 {/* PRO-START 
                 <MDBNavItem>
@@ -161,6 +174,7 @@ class App extends Component {
                 {/* PRO-END */}
               </MDBNavbarNav>
             </MDBCollapse>
+            
           </MDBNavbar>
           {collapseID && overlay}
           <main style={{ marginTop: "4rem" }}>
