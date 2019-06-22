@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 // Apollo
 import { graphql } from 'react-apollo';
 import { gql } from "apollo-boost";
@@ -51,11 +52,12 @@ class LoginPage extends Component {
       name, first_name, last_name, email, accessToken, picture
     }
 
-    this.setState({oAuth: true, fb_data: facebook_data});
+    this.setState(
+      { oAuth: true, fb_data: facebook_data },
+      this.gotoRegistration()
+    );
 
-    console.log(facebook_data);
-
-    // Check if user exists
+    // Missing: Check if user exists
     // If not: Save all data to DB and continue to registration process
     // If yes: Proceed to KIS user area
   }
@@ -214,6 +216,9 @@ class LoginPage extends Component {
                 </MDBBtn>
               </div>
             </form>
+            <div className="text-muted mt-3">
+              <p>Noch keinen Benutzer? <Link to={`/register`}>Registrieren</Link> Sie sich jetzt!</p>
+            </div>
 
           </MDBCol>
         </MDBRow>

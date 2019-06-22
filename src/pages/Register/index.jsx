@@ -103,7 +103,7 @@ class RegisterPage extends Component {
       formActivePanel3Changed: false,
       first_name: "",
       last_name: "",
-      email: this.getEmail(),
+      email: "",
       company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", hasVAT: false, name: "", suggestions: [] },
       passwordtemp: "",
       passwordrepeat: "",
@@ -304,15 +304,6 @@ class RegisterPage extends Component {
       return true;
     }
   };
-
-  // Get values from login
-  getEmail = () => {
-      if(this.props.location.state.email !== "" || this.props.location.state.email !== undefined || this.props.location.state.email !== null){
-        return this.props.location.state.email;
-      } else {
-        return "";
-      }
-  }
 
   foo = () => {
 
