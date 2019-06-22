@@ -5,7 +5,7 @@ import { HttpLink } from "apollo-link-http";
 import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo";
 // MDB
-import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse,   MDBNavItem, MDBFooter, MDBNavLink } from "mdbreact";
+import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBFooter } from "mdbreact";
 import { ReactComponent as Logo } from './assets/logo.svg';
 // Router
 import { BrowserRouter as Router } from "react-router-dom";
@@ -76,7 +76,7 @@ class App extends Component {
               navbar
             >
               <MDBNavbarNav right>
-                <MDBNavItem>
+                {/*<MDBNavItem>
                   <MDBNavLink
                     exact
                     to="/"
@@ -148,8 +148,8 @@ class App extends Component {
                   >
                     Addons
                   </MDBNavLink>
-                </MDBNavItem>
-                {/* PRO-START */}
+                </MDBNavItem>*/}
+                {/* PRO-START 
                 <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
