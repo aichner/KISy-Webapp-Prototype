@@ -6,6 +6,8 @@ import { gql } from "apollo-boost";
 // MDB
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
 import FacebookLogin from 'react-facebook-login';
+// Features
+import { RingLoader } from 'react-spinners';
 // Icons
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
@@ -33,7 +35,8 @@ class LoginPage extends Component {
       password: '',
       oAuth: false,
       fb_data: undefined,
-      status: undefined
+      status: undefined,
+      loading: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -41,12 +44,29 @@ class LoginPage extends Component {
   }
   
   responseFacebook = (response) => {
-    let name = response.name;
-    let first_name = response.first_name;
-    let last_name = response.last_name;
-    let email = response.email;
-    let accessToken = response.accessToken;
-    let picture = response.picture.data.url;
+    let name, first_name, last_name, email, accessToken, picture;
+    // Preset to undefined
+    name = first_name = last_name = email = accessToken = picture = undefined;
+
+    if(name !== undefined){
+      name = response.name;
+    }
+    if(first_name !== undefined){
+      first_name = response.first_name;
+    }
+    if(last_name !== undefined){
+      last_name = response.last_name;
+    }
+    if(email !== undefined){
+      email = response.email;
+    }
+    if(accessToken !== undefined){
+      accessToken = response.accessToken;
+    }
+    if(picture !== undefined){
+      picture = response.picture.data.url;
+    }
+      
 
     let facebook_data = {
       name, first_name, last_name, email, accessToken, picture
@@ -122,20 +142,23 @@ class LoginPage extends Component {
     }
   }
 
+  // Call user login mutation
   sendData = async () => {
-    this.props.mutate({
-      variables: {"username": this.state.username, "password": this.state.password}
-    })
-    .then(({ loading, data }) => {
-
-      if(data.tokenAuth.__typename === "ObtainJSONWebToken" && data.tokenAuth.token !== ""){
-        this.gotoKIS(data.tokenAuth.token);
-      } else {
-        console.log("Nope");
-      }
-    }).catch((loading, error) => {
-      
-      console.warn('there was an error sending the query', error);
+    this.setState({ loading: true }, () => {
+      this.props.mutate({
+        variables: {"username": this.state.username, "password": this.state.password}
+      })
+      .then(({ loading, data }) => {
+        this.setState({ loading: false });
+        if(data.tokenAuth.__typename === "ObtainJSONWebToken" && data.tokenAuth.token !== ""){
+          this.gotoKIS(data.tokenAuth.token);
+        } else {
+          console.log("Nope");
+        }
+      }).catch((loading, error) => {
+        this.setState({ loading: false });
+        console.warn('there was an error sending the query', error);
+      });
     });
   };
 
@@ -223,6 +246,7 @@ class LoginPage extends Component {
           </MDBCol>
         </MDBRow>
         <hr className="my-5" />
+        {this.state.loading && <RingLoader /> }
       </MDBContainer>
     );
   }

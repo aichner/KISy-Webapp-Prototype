@@ -134,8 +134,13 @@ class RegisterPage extends Component {
     this._isMounted = true;
     console.log(this.props.location.state);
     if(this.props.location.state !== undefined){
-      if(this.props.location.state.oAuth !== undefined && this.props.location.state.oAuth === true){
+      if(this.props.location.state.oAuth !== undefined && this.props.location.state.oAuth === true && this.props.location.state.fb_data !== undefined){
         console.log("FB");
+        this.setState({
+          email: this.props.location.state.fb_data.email,
+          first_name: this.props.location.state.fb_data.first_name,
+          last_name: this.props.location.state.fb_data.last_name
+        });
       } else {
         console.log("No FB");
       }
