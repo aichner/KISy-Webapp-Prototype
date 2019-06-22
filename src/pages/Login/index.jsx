@@ -122,8 +122,8 @@ class LoginPage extends Component {
     this.sendData();
   }
 
-  gotoKIS = (id) => {
-    this.props.history.push('/kis', { customerID: id });
+  gotoKIS = () => {
+    this.props.history.push('/kis');
   }
 
   gotoRegistration = (oAuth) => {
@@ -151,7 +151,8 @@ class LoginPage extends Component {
       .then(({ loading, data }) => {
         this.setState({ loading: false });
         if(data.tokenAuth.__typename === "ObtainJSONWebToken" && data.tokenAuth.token !== ""){
-          this.gotoKIS(data.tokenAuth.token);
+          localStorage.setItem('auth', data.tokenAuth.token);
+          this.gotoKIS();
         } else {
           console.log("Nope");
         }
@@ -190,10 +191,10 @@ class LoginPage extends Component {
               <div className="text-left">
                 <div>
                   <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                    Username
+                    E-Mail
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     name="username"
                     id="defaultFormLoginEmailEx"
                     className="form-control"
