@@ -75,7 +75,7 @@ class App extends Component {
               navbar
             >
             
-              <MDBNavbarNav center>
+              <MDBNavbarNav>
                 <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}

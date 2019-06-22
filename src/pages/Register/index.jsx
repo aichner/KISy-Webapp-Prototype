@@ -109,6 +109,7 @@ class RegisterPage extends Component {
     this.validateVAT = this.validateVAT.bind(this);
   }
   componentDidMount() {
+    console.log(this.props.location.state);
     this._isMounted = true;
     if(this.props.location.state !== undefined){
       if(this.props.location.state.oAuth !== undefined && this.props.location.state.oAuth === true && this.props.location.state.fb_data !== undefined){
@@ -535,7 +536,7 @@ class RegisterPage extends Component {
                         <div className="form-group">
                           <label htmlFor="formGroupExampleInput">E-Mail<span className="deep-orange-text pl-1">*</span></label>
                           <input
-                            value={ this.state.email }
+                            value={ this.state.email || '' }
                             type="email"
                             name="email"
                             className="form-control"

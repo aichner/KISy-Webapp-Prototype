@@ -7,7 +7,7 @@ import { gql } from "apollo-boost";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
 import FacebookLogin from 'react-facebook-login';
 // Features
-import { RingLoader } from 'react-spinners';
+//import { RingLoader } from 'react-spinners';
 // Icons
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
@@ -47,7 +47,7 @@ class LoginPage extends Component {
   responseFacebook = (response) => {
     let name, first_name, last_name, email, accessToken, picture;
     // Preset to undefined
-    name = first_name = last_name = email = accessToken = picture = undefined;
+    name = first_name = last_name = email = accessToken = picture = "";
 
     if(name !== undefined){
       name = response.name;
