@@ -28,7 +28,7 @@ class LoginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      username: '',
       password: '',
       oAuth: false,
       fb_data: undefined,
@@ -78,22 +78,22 @@ class LoginPage extends Component {
     console.log(this.state);
 
     let error = false;
-    let e = this.state.email;
+    let u = this.state.username;
     let p = this.state.password;
 
     if (!error) {
-      this.sendForm(e, p);
+      this.sendForm(u, p);
     }
   }
 
-  sendForm = (e, p) => {
+  sendForm = (u, p) => {
     this.setState({oAuth: false});
-    console.log("E-Mail: "+e+" Password: "+p);
+    console.log("Username: "+u+" Password: "+p);
 
     // Send data to server
 
     // Check if user exists
-    // If not: Show dialog that asks if the user wants to create a new user using the provided email and password
+    // If not: Show dialog that asks if the user wants to create a new user using the provided username and password
     // this.gotoRegistration();
     // If yes: Proceed to KIS user area
     // this.gotoKIS();
@@ -106,15 +106,15 @@ class LoginPage extends Component {
 
   gotoRegistration = () => {
     if(this.state.oAuth && this.state.fb_data !== undefined){
-      this.props.history.push('/register', { email: this.state.email, oAuth: this.state.oAuth, fb_data: this.state.fb_data });
+      this.props.history.push('/register', { username: this.state.username, oAuth: this.state.oAuth, fb_data: this.state.fb_data });
     } else {
-      this.props.history.push('/register', { email: this.state.email, oAuth: this.state.oAuth });
+      this.props.history.push('/register', { username: this.state.username, oAuth: this.state.oAuth });
     }
   }
 
   forgotPassword = () => {
-    if(this.state.email !== undefined && this.state.email !== ""){
-      this.props.history.push('/forgot', { email: this.state.email });
+    if(this.state.username !== undefined && this.state.username !== ""){
+      this.props.history.push('/forgot', { username: this.state.username });
     } else {
       this.props.history.push('/forgot');
     }
@@ -122,7 +122,7 @@ class LoginPage extends Component {
 
   sendData = async () => {
     this.props.mutate({
-      variables: {"username": "cisco", "password": this.state.password}
+      variables: {"username": this.state.username, "password": this.state.password}
     })
     .then(({ loading, data }) => {
 
@@ -165,19 +165,19 @@ class LoginPage extends Component {
               <div className="text-left">
                 <div>
                   <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                    E-Mail
+                    Username
                   </label>
                   <input
-                    type="email"
-                    name="email"
+                    type="text"
+                    name="username"
                     id="defaultFormLoginEmailEx"
                     className="form-control"
                     onChange={ this.handleChange }
-                    value={ this.state.email }
+                    value={ this.state.username }
                     required
                   />
                   <div style={{ top: "auto" }} className="invalid-tooltip">
-                    Bitte geben Sie eine gültige E-Mail Adresse ein
+                    Bitte geben Sie einen gültigen Username ein
                   </div>
                 </div>
                 <br />
