@@ -12,6 +12,7 @@ import { RingLoader } from 'react-spinners';
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
 import "./login.scss";
+import "./images.scss";
 
 const LOGIN_USER_MUTATION = gql`
   mutation gettoken(
@@ -165,10 +166,10 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <MDBContainer className="mt-5">
+      <MDBContainer className="mt-5 login">
         <MDBRow>
           <MDBCol md="6" className="m-auto text-center">
-            
+              <div className="banner auth"></div>
               <p className="h4 text-center mb-4">Login</p>
               <div className="oAuth">
                 <FacebookLogin
