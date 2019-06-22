@@ -54,8 +54,8 @@ class LoginPage extends Component {
 
     this.setState(
       { oAuth: true, fb_data: facebook_data },
-      this.gotoRegistration()
-    );
+      () => {this.gotoRegistration(true)
+    });
 
     // Missing: Check if user exists
     // If not: Save all data to DB and continue to registration process
@@ -106,11 +106,11 @@ class LoginPage extends Component {
     this.props.history.push('/kis', { customerID: id });
   }
 
-  gotoRegistration = () => {
-    if(this.state.oAuth && this.state.fb_data !== undefined){
-      this.props.history.push('/register', { username: this.state.username, oAuth: this.state.oAuth, fb_data: this.state.fb_data });
+  gotoRegistration = (oAuth) => {
+    if(this.state.oAuth){
+      this.props.history.push('/register', { username: this.state.username, oAuth: true, fb_data: this.state.fb_data });
     } else {
-      this.props.history.push('/register', { username: this.state.username, oAuth: this.state.oAuth });
+      this.props.history.push('/register', { username: this.state.username, oAuth: false });
     }
   }
 
@@ -216,7 +216,7 @@ class LoginPage extends Component {
                 </MDBBtn>
               </div>
             </form>
-            <div className="text-muted mt-3">
+            <div className="text-muted mt-4">
               <p>Noch keinen Benutzer? <Link to={`/register`}>Registrieren</Link> Sie sich jetzt!</p>
             </div>
 

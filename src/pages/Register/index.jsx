@@ -92,6 +92,8 @@ const getSuggestions = value => {
 }
 
 class RegisterPage extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state={
@@ -127,6 +129,21 @@ class RegisterPage extends Component {
     this.validatePassword = this.validatePassword.bind(this);
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.validateVAT = this.validateVAT.bind(this);
+  }
+  componentDidMount() {
+    this._isMounted = true;
+    console.log(this.props.location.state);
+    if(this.props.location.state !== undefined){
+      if(this.props.location.state.oAuth !== undefined && this.props.location.state.oAuth === true){
+        console.log("FB");
+      } else {
+        console.log("No FB");
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handlePasswordChange = (event) => {
