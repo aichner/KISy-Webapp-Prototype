@@ -11,15 +11,15 @@ import { MDBContainer, MDBNavLink, MDBNavItem, MDBTabContent, MDBNav, MDBIcon } 
 // import Confetti from '../../components/molecules/Confetti';
 
 // molecules
-import Tab from "../../components/molecules/Tab"
+import Tab from "../../components/molecules/Tab";
 
 // organisms
-import { Dashboard, Orders, Statistics, Data } from "../../components/organisms/Tabs"
+import { Dashboard, Orders, Statistics, Data } from "../../components/organisms/Tabs";
+import PaymentModal from "../../components/organisms/PaymentModal";
 
 // CSS
 import "./kis.scss";
 import "./images.scss";
-
 
 const GETDATA_USER_MUTATION = gql`
   mutation getdata(
@@ -55,7 +55,9 @@ class KISPage extends Component {
       activeItemOuterTabs: "1",
       activeItemInnerPills: "1",
       activeItemClassicTabs1: "1",
-      activeItemClassicTabs2: "1"
+      activeItemClassicTabs2: "1",
+      paymentShow: "",
+      paymentInvoiceID: ""
     }
   }
 
@@ -276,6 +278,7 @@ class KISPage extends Component {
               </Tab>
             </MDBTabContent>
           </div>
+          <PaymentModal show={this.state.paymentShow} invoiceID={this.state.paymentInvoiceID} />
         </MDBContainer>
       </div>
     );

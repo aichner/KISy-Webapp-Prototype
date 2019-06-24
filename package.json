@@ -21,6 +21,7 @@
     "react-password-strength": "^2.4.0",
     "react-scripts": "3.0.1",
     "react-spinners": "^0.5.4",
+    "react-stripe-elements": "^3.0.0",
     "validate-vat": "^0.5.1"
   },
   "scripts": {

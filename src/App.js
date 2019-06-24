@@ -10,6 +10,8 @@ import logo from './assets/logo_h50.png';
 // Router
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./Routes";
+// Stripe
+//import {StripeProvider} from 'react-stripe-elements';
 
 import './style.scss';
 
@@ -63,131 +65,132 @@ class App extends Component {
     const { collapseID } = this.state;
 
     return (
-      <ApolloProvider client={client}>
-      <Router>
-        <div className="flyout">
-          <MDBNavbar color="white" light expand="md" fixed="top" scrolling>
-            
-            <MDBNavbarToggler onClick={this.toggleCollapse("mainNavbarCollapse")} />
-            <MDBCollapse
-              id="mainNavbarCollapse"
-              isOpen={this.state.collapseID}
-              navbar
-            >
-            
-              <MDBNavbarNav>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/test"
-                  >
-                    Test Link
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavbarBrand className="ml-2 mr-2" href="/">
-                    <img src={logo} alt="Company logo" className="img-fluid"/>
-                  </MDBNavbarBrand>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/test"
-                  >
-                    Test Link
-                  </MDBNavLink>
-                </MDBNavItem>
-                {/*<MDBNavItem>
-                  <MDBNavLink
-                    exact
-                    to="/"
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                  >
-                    Home
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/css"
-                  >
-                    CSS
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/components"
-                  >
-                    Components
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/advanced"
-                  >
-                    Advanced
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/navigation"
-                  >
-                    Navigation
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/forms"
-                  >
-                    Forms
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/tables"
-                  >
-                    Tables
-                  </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/modals"
-                  >
-                    Modals
-                  </MDBNavLink>
-                </MDBNavItem>*/}
-                {/* PRO-START 
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/sections"
-                  >
-                    Sections
-                  </MDBNavLink>
-                </MDBNavItem>
-                {/* PRO-END */}
-              </MDBNavbarNav>
-            </MDBCollapse>
-            
-          </MDBNavbar>
-          {collapseID && overlay}
-          <main style={{ marginTop: "4rem" }}>
-            <Routes />
-          </main>
-          <MDBFooter color="blue">
-            <p className="footer-copyright mb-0 py-3 text-center">
-              &copy; 2017 - {new Date().getFullYear()} Copyright: Christian Aichner
-            </p>
-          </MDBFooter>
-        </div>
-      </Router>
-      </ApolloProvider>
+      /*<StripeProvider apiKey="pk_test_3mHrqGgjRYHEbeOGUksNpMok008NqIIkRF">*/
+        <ApolloProvider client={client}>
+        <Router>
+          <div className="flyout">
+            <MDBNavbar color="white" light expand="md" fixed="top" scrolling>
+              
+              <MDBNavbarToggler onClick={this.toggleCollapse("mainNavbarCollapse")} />
+              <MDBCollapse
+                id="mainNavbarCollapse"
+                isOpen={this.state.collapseID}
+                navbar
+              >
+                <MDBNavbarNav>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/test"
+                    >
+                      Test Link
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavbarBrand className="ml-2 mr-2" href="/">
+                      <img src={logo} alt="Company logo" className="img-fluid"/>
+                    </MDBNavbarBrand>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/test"
+                    >
+                      Test Link
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  {/*<MDBNavItem>
+                    <MDBNavLink
+                      exact
+                      to="/"
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                    >
+                      Home
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/css"
+                    >
+                      CSS
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/components"
+                    >
+                      Components
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/advanced"
+                    >
+                      Advanced
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/navigation"
+                    >
+                      Navigation
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/forms"
+                    >
+                      Forms
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/tables"
+                    >
+                      Tables
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/modals"
+                    >
+                      Modals
+                    </MDBNavLink>
+                  </MDBNavItem>*/}
+                  {/* PRO-START 
+                  <MDBNavItem>
+                    <MDBNavLink
+                      onClick={this.closeCollapse("mainNavbarCollapse")}
+                      to="/sections"
+                    >
+                      Sections
+                    </MDBNavLink>
+                  </MDBNavItem>
+                  {/* PRO-END */}
+                </MDBNavbarNav>
+              </MDBCollapse>
+              
+            </MDBNavbar>
+            {collapseID && overlay}
+            <main style={{ marginTop: "4rem" }}>
+              <Routes />
+            </main>
+            <MDBFooter color="blue">
+              <p className="footer-copyright mb-0 py-3 text-center">
+                &copy; 2017 - {new Date().getFullYear()} Copyright: Christian Aichner
+              </p>
+            </MDBFooter>
+          </div>
+        </Router>
+        </ApolloProvider>
+      /*</StripeProvider>*/
     );
   }
 }
