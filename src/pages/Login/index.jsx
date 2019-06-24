@@ -1,19 +1,43 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+// Apollo
+import { graphql } from 'react-apollo';
+import { gql } from "apollo-boost";
+// MDB
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
 import FacebookLogin from 'react-facebook-login';
+// Features
+//import { RingLoader } from 'react-spinners';
 // Icons
 // import { FaFacebook } from 'react-icons/fa';
 // CSS
 import "./login.scss";
+import "./images.scss";
+
+const LOGIN_USER_MUTATION = gql`
+  mutation gettoken(
+    $username: String!
+    $password: String!
+  ) {
+    tokenAuth(
+      username: $username
+      password: $password
+    ){
+      token
+    }
+  }
+`;
 
 class LoginPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      username: '',
       password: '',
       oAuth: false,
-      fb_data: undefined
+      fb_data: undefined,
+      status: undefined,
+      loading: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -21,22 +45,40 @@ class LoginPage extends Component {
   }
   
   responseFacebook = (response) => {
-    let name = response.name;
-    let first_name = response.first_name;
-    let last_name = response.last_name;
-    let email = response.email;
-    let accessToken = response.accessToken;
-    let picture = response.picture.data.url;
+    let name, first_name, last_name, email, accessToken, picture;
+    // Preset to undefined
+    name = first_name = last_name = email = accessToken = picture = "";
+
+    if(name !== undefined){
+      name = response.name;
+    }
+    if(first_name !== undefined){
+      first_name = response.first_name;
+    }
+    if(last_name !== undefined){
+      last_name = response.last_name;
+    }
+    if(email !== undefined){
+      email = response.email;
+    }
+    if(accessToken !== undefined){
+      accessToken = response.accessToken;
+    }
+    if(picture !== undefined){
+      picture = response.picture.data.url;
+    }
+      
 
     let facebook_data = {
       name, first_name, last_name, email, accessToken, picture
     }
 
-    this.setState({oAuth: true, fb_data: facebook_data});
+    this.setState(
+      { oAuth: true, fb_data: facebook_data },
+      () => {this.gotoRegistration(true)
+    });
 
-    console.log(facebook_data);
-
-    // Check if user exists
+    // Missing: Check if user exists
     // If not: Save all data to DB and continue to registration process
     // If yes: Proceed to KIS user area
   }
@@ -59,53 +101,75 @@ class LoginPage extends Component {
     console.log(this.state);
 
     let error = false;
-    let e = this.state.email;
+    let u = this.state.username;
     let p = this.state.password;
 
     if (!error) {
-      this.sendForm(e, p);
+      this.sendForm(u, p);
     }
   }
 
-  sendForm = (e, p) => {
+  sendForm = (u, p) => {
     this.setState({oAuth: false});
-    console.log("E-Mail: "+e+" Password: "+p);
+    console.log("Username: "+u+" Password: "+p);
 
     // Send data to server
 
     // Check if user exists
-    // If not: Show dialog that asks if the user wants to create a new user using the provided email and password
-    this.gotoRegistration();
+    // If not: Show dialog that asks if the user wants to create a new user using the provided username and password
+    // this.gotoRegistration();
     // If yes: Proceed to KIS user area
     // this.gotoKIS();
+    this.sendData();
   }
 
   gotoKIS = () => {
-    this.props.history.push('/kisy', { state: "value" });
+    this.props.history.push('/kis');
   }
 
-  gotoRegistration = () => {
-    if(this.state.oAuth && this.state.fb_data !== undefined){
-      this.props.history.push('/register', { email: this.state.email, oAuth: this.state.oAuth, fb_data: this.state.fb_data });
+  gotoRegistration = (oAuth) => {
+    if(this.state.oAuth){
+      this.props.history.push('/register', { username: this.state.username, oAuth: true, fb_data: this.state.fb_data });
     } else {
-      this.props.history.push('/register', { email: this.state.email, oAuth: this.state.oAuth });
+      this.props.history.push('/register', { username: this.state.username, oAuth: false });
     }
   }
 
   forgotPassword = () => {
-    if(this.state.email !== undefined && this.state.email !== ""){
-      this.props.history.push('/forgot', { email: this.state.email });
+    if(this.state.username !== undefined && this.state.username !== ""){
+      this.props.history.push('/forgot', { username: this.state.username });
     } else {
       this.props.history.push('/forgot');
     }
   }
 
+  // Call user login mutation
+  sendData = async () => {
+    this.setState({ loading: true }, () => {
+      this.props.mutate({
+        variables: {"username": this.state.username, "password": this.state.password}
+      })
+      .then(({ loading, data }) => {
+        this.setState({ loading: false });
+        if(data.tokenAuth.__typename === "ObtainJSONWebToken" && data.tokenAuth.token !== ""){
+          localStorage.setItem('auth', data.tokenAuth.token);
+          this.gotoKIS();
+        } else {
+          console.log("Nope");
+        }
+      }).catch((loading, error) => {
+        this.setState({ loading: false });
+        console.warn('there was an error sending the query', error);
+      });
+    });
+  };
+
   render() {
     return (
-      <MDBContainer className="mt-5">
+      <MDBContainer className="mt-5 login">
         <MDBRow>
           <MDBCol md="6" className="m-auto text-center">
-            
+              <div className="banner auth"></div>
               <p className="h4 text-center mb-4">Login</p>
               <div className="oAuth">
                 <FacebookLogin
@@ -132,15 +196,15 @@ class LoginPage extends Component {
                   </label>
                   <input
                     type="email"
-                    name="email"
+                    name="username"
                     id="defaultFormLoginEmailEx"
                     className="form-control"
                     onChange={ this.handleChange }
-                    value={ this.state.email }
+                    value={ this.state.username }
                     required
                   />
                   <div style={{ top: "auto" }} className="invalid-tooltip">
-                    Bitte geben Sie eine gültige E-Mail Adresse ein
+                    Bitte geben Sie einen gültigen Username ein
                   </div>
                 </div>
                 <br />
@@ -177,13 +241,17 @@ class LoginPage extends Component {
                 </MDBBtn>
               </div>
             </form>
+            <div className="text-muted mt-4">
+              <p>Noch keinen Benutzer? <Link to={`/register`}>Registrieren</Link> Sie sich jetzt!</p>
+            </div>
 
           </MDBCol>
         </MDBRow>
         <hr className="my-5" />
+        {/*this.state.loading && <RingLoader /> */}
       </MDBContainer>
     );
   }
 }
 
-export default LoginPage;
+export default graphql(LOGIN_USER_MUTATION)(LoginPage);

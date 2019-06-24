@@ -6,6 +6,9 @@ import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import KisPage from "./pages/Kis";
 
+// 404
+import NoMatch from "./pages/NoMatch";
+
 
 // Templates
 import NavigationNavPage from "./templates/NavigationNavPage";
@@ -253,11 +256,7 @@ class Routes extends React.Component {
         <Route path="/tables/pro/table-styles" component={TableStylesPagePro} />
         <Route path="/tables/pro/datatable-csv" component={DatatableCsvPage} />
         {/* PRO-END */}
-        <Route
-          render={function () {
-            return <h1>Not Found</h1>;
-          }}
-        />
+        <Route component={NoMatch} />
       </Switch>
     );
   }

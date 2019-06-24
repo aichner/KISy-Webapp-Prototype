@@ -1,5 +1,10 @@
 import React, { Component } from "react";
+// Apollo
+import { graphql } from 'react-apollo';
+import { gql } from "apollo-boost";
+// MDB
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBProgress, MDBRangeInput, MDBIcon, MDBCard, MDBCardUp, MDBCardBody, MDBBadge } from "mdbreact";
+// Features
 import ReactPasswordStrength from 'react-password-strength';
 import Autosuggest from 'react-autosuggest';
 // Components
@@ -10,62 +15,34 @@ import Confetti from '../../components/molecules/Confetti';
 // CSS
 import "./register.scss";
 
+const CREATE_USER_MUTATION = gql`
+  mutation create(
+    $username: String!
+    $email: String!
+    $password: String!
+  ){
+    createUser(
+      username:$username
+      email:$email
+      password:$password
+    ){
+      user{
+        username
+        email
+      }
+    }
+  }
+`;
+
 const companies = [
   {
-    name: 'C',
-    year: 1972
+    name: 'Schmalzl Inc.'
   },
   {
-    name: 'C#',
-    year: 2000
+    name: 'Sobe GmbH'
   },
   {
-    name: 'C++',
-    year: 1983
-  },
-  {
-    name: 'Clojure',
-    year: 2007
-  },
-  {
-    name: 'Elm',
-    year: 2012
-  },
-  {
-    name: 'Go',
-    year: 2009
-  },
-  {
-    name: 'Haskell',
-    year: 1990
-  },
-  {
-    name: 'Java',
-    year: 1995
-  },
-  {
-    name: 'Javascript',
-    year: 1995
-  },
-  {
-    name: 'Perl',
-    year: 1987
-  },
-  {
-    name: 'PHP',
-    year: 1995
-  },
-  {
-    name: 'Python',
-    year: 1991
-  },
-  {
-    name: 'Ruby',
-    year: 1995
-  },
-  {
-    name: 'Scala',
-    year: 2003
+    name: 'Hufsky & Co KG'
   }
 ];
 
@@ -92,6 +69,8 @@ const getSuggestions = value => {
 }
 
 class RegisterPage extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state={
@@ -103,7 +82,7 @@ class RegisterPage extends Component {
       formActivePanel3Changed: false,
       first_name: "",
       last_name: "",
-      email: this.getEmail(),
+      email: "",
       company: { isCompany: false, vatNumber: "", vatCountryCode:  "", vatAddress: "", hasVAT: false, name: "", suggestions: [] },
       passwordtemp: "",
       passwordrepeat: "",
@@ -115,7 +94,8 @@ class RegisterPage extends Component {
       personalisation: { informal: true, gdpr: false, newsletter: false, connection: 50, sex: "" },
       progress: { value: 25, text: "Gleich geschafft!", lastPoint: 1},
       first_time_balance: <MDBBadge pill color="success">30,- €</MDBBadge>,
-      showConfetti: false
+      showConfetti: false,
+      finished: false
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -127,6 +107,26 @@ class RegisterPage extends Component {
     this.validatePassword = this.validatePassword.bind(this);
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.validateVAT = this.validateVAT.bind(this);
+  }
+  componentDidMount() {
+    console.log(this.props.location.state);
+    this._isMounted = true;
+    if(this.props.location.state !== undefined){
+      if(this.props.location.state.oAuth !== undefined && this.props.location.state.oAuth === true && this.props.location.state.fb_data !== undefined){
+        console.log("FB");
+        this.setState({
+          email: this.props.location.state.fb_data.email,
+          first_name: this.props.location.state.fb_data.first_name,
+          last_name: this.props.location.state.fb_data.last_name
+        });
+      } else {
+        console.log("No FB");
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handlePasswordChange = (event) => {
@@ -257,11 +257,14 @@ class RegisterPage extends Component {
           return false;
         }
       case 4:
+        let status = false;
         if(this.state.personalisation.gdpr){
-          return true;
-        }else{
-          return false;
+          status = true;
         }
+        if(this.createUser()){
+          status = true;
+        }
+        return status;
       default:
         return false;
     }
@@ -304,15 +307,6 @@ class RegisterPage extends Component {
       return true;
     }
   };
-
-  // Get values from login
-  getEmail = () => {
-      if(this.props.location.state.email !== "" || this.props.location.state.email !== undefined || this.props.location.state.email !== null){
-        return this.props.location.state.email;
-      } else {
-        return "";
-      }
-  }
 
   foo = () => {
 
@@ -482,6 +476,23 @@ class RegisterPage extends Component {
   startKIS = () => {
     this.props.history.push('/kis', { email: this.state.email, personalisation: this.state.personalisation, first_name: this.state.first_name, last_name: this.state.last_name });
   }
+
+   // Call user login mutation
+  createUser = async () => {
+    this.setState({ finished: false }, () => {
+      this.props.mutate({
+        variables: {"username": this.state.email, "email": this.state.email, "password": this.state.password.value}
+      })
+      .then(({ loading, data }) => {
+        this.setState({ finished: true });
+        console.log(data);
+      }).catch((error) => {
+        this.setState({ finished: true });
+        console.warn('there was an error sending the query', error);
+      });
+    });
+  };
+
   
   render() {
     
@@ -525,7 +536,7 @@ class RegisterPage extends Component {
                         <div className="form-group">
                           <label htmlFor="formGroupExampleInput">E-Mail<span className="deep-orange-text pl-1">*</span></label>
                           <input
-                            value={ this.state.email }
+                            value={ this.state.email || '' }
                             type="email"
                             name="email"
                             className="form-control"
@@ -837,4 +848,4 @@ class RegisterPage extends Component {
   }
 }
 
-export default RegisterPage;
+export default graphql(CREATE_USER_MUTATION)(RegisterPage);

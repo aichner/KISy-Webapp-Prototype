@@ -1,8 +1,40 @@
 import React, { Component } from "react";
-import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse,   MDBNavItem, MDBFooter, MDBNavLink } from "mdbreact";
-import { ReactComponent as Logo } from './assets/logo.svg';
+// Apollo
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-cache-inmemory";
+import { ApolloProvider } from "react-apollo";
+// MDB
+import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBFooter, MDBNavItem, MDBNavLink } from "mdbreact";
+import logo from './assets/logo_h50.png';
+// Router
 import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./Routes";
+
+import './style.scss';
+
+export const APIHost = 'https://kys.erebos.xyz';
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData: {
+    __schema: {
+      types: [], // no types provided - works
+    },
+  },
+});
+
+const cache = new InMemoryCache({ fragmentMatcher });
+
+const APILink = APIHost+"/api/graphql";
+
+// console.log(APILink);
+
+// Apollo client setup
+const client = new ApolloClient({
+  cache,
+  link: new HttpLink({ uri: APILink })
+});
+
 
 class App extends Component {
 
@@ -31,22 +63,41 @@ class App extends Component {
     const { collapseID } = this.state;
 
     return (
+      <ApolloProvider client={client}>
       <Router>
-      
         <div className="flyout">
-          <MDBNavbar color="blue" dark expand="md" fixed="top" scrolling>
-            <MDBNavbarBrand href="/">
-              <Logo style={{ height: '2.5rem', width: "2.5rem" }} />
-              KISy
-            </MDBNavbarBrand>
+          <MDBNavbar color="white" light expand="md" fixed="top" scrolling>
+            
             <MDBNavbarToggler onClick={this.toggleCollapse("mainNavbarCollapse")} />
             <MDBCollapse
               id="mainNavbarCollapse"
               isOpen={this.state.collapseID}
               navbar
             >
-              <MDBNavbarNav right>
+            
+              <MDBNavbarNav>
                 <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse("mainNavbarCollapse")}
+                    to="/test"
+                  >
+                    Test Link
+                  </MDBNavLink>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavbarBrand className="ml-2 mr-2" href="/">
+                    <img src={logo} alt="Company logo" className="img-fluid"/>
+                  </MDBNavbarBrand>
+                </MDBNavItem>
+                <MDBNavItem>
+                  <MDBNavLink
+                    onClick={this.closeCollapse("mainNavbarCollapse")}
+                    to="/test"
+                  >
+                    Test Link
+                  </MDBNavLink>
+                </MDBNavItem>
+                {/*<MDBNavItem>
                   <MDBNavLink
                     exact
                     to="/"
@@ -110,16 +161,8 @@ class App extends Component {
                   >
                     Modals
                   </MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                  <MDBNavLink
-                    onClick={this.closeCollapse("mainNavbarCollapse")}
-                    to="/addons"
-                  >
-                    Addons
-                  </MDBNavLink>
-                </MDBNavItem>
-                {/* PRO-START */}
+                </MDBNavItem>*/}
+                {/* PRO-START 
                 <MDBNavItem>
                   <MDBNavLink
                     onClick={this.closeCollapse("mainNavbarCollapse")}
@@ -131,6 +174,7 @@ class App extends Component {
                 {/* PRO-END */}
               </MDBNavbarNav>
             </MDBCollapse>
+            
           </MDBNavbar>
           {collapseID && overlay}
           <main style={{ marginTop: "4rem" }}>
@@ -143,6 +187,7 @@ class App extends Component {
           </MDBFooter>
         </div>
       </Router>
+      </ApolloProvider>
     );
   }
 }
