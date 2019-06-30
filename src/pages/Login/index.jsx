@@ -192,10 +192,10 @@ class LoginPage extends Component {
               <div className="text-left">
                 <div>
                   <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
-                    E-Mail
+                    E-Mail oder Username
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     name="username"
                     id="defaultFormLoginEmailEx"
                     className="form-control"
